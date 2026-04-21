@@ -204,91 +204,17 @@
 
 <nav>
   <ul>
-    <li><a href="#flow" class="active">システム構成</a></li>
-    <li><a href="#progress">進捗状況</a></li>
+    <li><a href="#aiflow" class="active">AIフロー</a></li>
+    <li><a href="#progress">実装進捗</a></li>
     <li><a href="#manual">運用マニュアル</a></li>
-    <li><a href="#gtm">GTM計測設定</a></li>
-    <li><a href="#looker">ダッシュボード</a></li>
-    <li><a href="#faq">よくある質問</a></li>
   </ul>
 </nav>
 
 <div class="container">
 
-  <!-- 現在のステータスサマリー -->
-  <div class="section" id="status-summary" style="margin-bottom:28px;">
-    <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.07);overflow:hidden;">
-      <div style="background:#1e293b;color:white;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-        <span style="font-size:15px;font-weight:700;">📋 現在のステータス（2026-04-21 時点）</span>
-        <span style="font-size:11px;background:rgba(255,255,255,0.15);padding:3px 10px;border-radius:99px;">4/24 納品予定</span>
-      </div>
-      <div style="padding:20px 24px;">
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:16px;">
-          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;">
-            <div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:8px;letter-spacing:1px;">✅ 完了済み</div>
-            <ul style="font-size:13px;color:#14532d;line-height:2;list-style:none;padding:0;">
-              <li>✅ GA4 × BigQuery 連携（4/11〜）</li>
-              <li>✅ BQ分析テーブル 5種</li>
-              <li>✅ AI月次レポート自動生成</li>
-              <li>✅ 改善施策スコアリング</li>
-              <li>✅ 自然言語QA機能</li>
-              <li>✅ Looker Studio Page1・Page2</li>
-              <li>✅ GTMタグ 3種 コード完成</li>
-              <li>✅ GTM管理画面アクセス権限 受領</li>
-            </ul>
-          </div>
-          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;">
-            <div style="font-size:11px;font-weight:700;color:#1d4ed8;margin-bottom:8px;letter-spacing:1px;">🔁 進行中（4/22〜23 完成予定）</div>
-            <ul style="font-size:13px;color:#1e40af;line-height:2;list-style:none;padding:0;">
-              <li>✅ GTMタグ設置（GTM-5B3L5372）</li>
-              <li>🔁 Looker Studio Page3（チャネル別）</li>
-              <li>🔁 Looker Studio Page4（ページ別）</li>
-              <li>🔁 Looker Studio Page5（統合ビュー）</li>
-            </ul>
-          </div>
-          <div style="background:#faf5ff;border:1px solid #ddd6fe;border-radius:8px;padding:12px 16px;">
-            <div style="font-size:11px;font-weight:700;color:#6d28d9;margin-bottom:8px;letter-spacing:1px;">⏳ 4/24 納品時</div>
-            <ul style="font-size:13px;color:#5b21b6;line-height:2;list-style:none;padding:0;">
-              <li>⏳ Looker Studio URL お渡し</li>
-              <li>⏳ 権限移譲・管理者設定</li>
-              <li>⏳ 最終マニュアルお渡し</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- コピー用テキストサマリー -->
-        <div style="background:#f8faff;border:1px solid #e0e7ff;border-radius:8px;padding:16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-            <span style="font-size:12px;font-weight:700;color:#4338ca;">📋 進捗報告テキスト（コピー用）</span>
-            <button onclick="copyStatus()" style="font-size:11px;background:#4338ca;color:white;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;">コピー</button>
-          </div>
-          <pre id="status-copy-text" style="font-size:12.5px;line-height:1.9;color:#374151;white-space:pre-wrap;font-family:'Hiragino Sans','Meiryo',sans-serif;margin:0;">【進捗報告 2026-04-21】
-
-■完了済み
-✅ GA4 × BigQuery 連携（4/11〜 自動エクスポート継続中）
-✅ BQ分析テーブル 5種（KPI・ファネル・チャネル・ページ・統合）
-✅ AI月次レポート自動生成（毎月1日 AM9:00 → aspr.k.kamimura@gmail.com）
-✅ 改善施策スコアリング・自然言語QA
-✅ Looker Studio Page1（KPIサマリー）・Page2（ファネル分析）
-✅ GTMタグ 3種 コード完成・GTM管理画面アクセス権限 受領済み
-✅ GTMタグ設置（GTM-5B3L5372 / スクロール・CTA・フォーム）※4/21公開完了
-
-■進行中（4/22〜23 完成予定）
-🔁 Looker Studio Page3〜5（チャネル・ページ・統合ビュー）
-
-■4/24 納品予定
-⏳ Looker Studio URL お渡し・権限移譲・最終マニュアルお渡し
-
-仕様書・マニュアル:
-https://ai-flow-architect.github.io/ark-analytics-spec/</pre>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ① システム構成フロー -->
-  <div class="section" id="flow">
-    <div class="section-title">📐 システム構成フロー</div>
+  <!-- ① AIフロー -->
+  <div class="section" id="aiflow">
+    <div class="section-title">🤖 AIフロー</div>
     <div class="flow-diagram">
 
       <!-- 入力 -->
@@ -441,11 +367,177 @@ https://ai-flow-architect.github.io/ark-analytics-spec/</pre>
     <!-- タブ -->
     <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
       <div class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab(this,'tab-auto')">① 自動処理（操作不要）</button>
-        <button class="tab-btn" onclick="switchTab(this,'tab-qa')">② 自然言語QA</button>
-        <button class="tab-btn" onclick="switchTab(this,'tab-scorer')">③ 改善スコアリング</button>
-        <button class="tab-btn" onclick="switchTab(this,'tab-report')">④ 月次レポート</button>
-        <button class="tab-btn" onclick="switchTab(this,'tab-trouble')">⑤ 困ったときは</button>
+        <button class="tab-btn active" onclick="switchTab(this,'tab-status')">① 進捗情報・ステータス</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-gtm')">② GTM測定</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-faq')">③ よくある質問</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-auto')">④ 自動処理（操作不要）</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-qa')">⑤ 自然言語QA</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-scorer')">⑥ 改善スコアリング</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-report')">⑦ 月次レポート</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-trouble')">⑧ 困ったときは</button>
+      </div>
+
+      <!-- タブ①: 進捗情報・ステータス -->
+      <div id="tab-status" class="tab-content active">
+        <div style="padding:20px 24px;">
+          <div style="background:#1e293b;color:white;padding:14px 20px;border-radius:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+            <span style="font-size:15px;font-weight:700;">📋 現在のステータス（2026-04-21 時点）</span>
+            <span style="font-size:11px;background:rgba(255,255,255,0.15);padding:3px 10px;border-radius:99px;">4/24 納品予定</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:16px;">
+            <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;">
+              <div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:8px;letter-spacing:1px;">✅ 完了済み</div>
+              <ul style="font-size:13px;color:#14532d;line-height:2;list-style:none;padding:0;">
+                <li>✅ GA4 × BigQuery 連携（4/11〜）</li>
+                <li>✅ BQ分析テーブル 5種</li>
+                <li>✅ AI月次レポート自動生成</li>
+                <li>✅ 改善施策スコアリング</li>
+                <li>✅ 自然言語QA機能</li>
+                <li>✅ Looker Studio Page1・Page2</li>
+                <li>✅ GTMタグ 3種 コード完成</li>
+                <li>✅ GTMタグ設置（GTM-5B3L5372）※4/21公開完了</li>
+              </ul>
+            </div>
+            <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;">
+              <div style="font-size:11px;font-weight:700;color:#1d4ed8;margin-bottom:8px;letter-spacing:1px;">🔁 進行中（4/22〜23 完成予定）</div>
+              <ul style="font-size:13px;color:#1e40af;line-height:2;list-style:none;padding:0;">
+                <li>🔁 Looker Studio Page3（チャネル別）</li>
+                <li>🔁 Looker Studio Page4（ページ別）</li>
+                <li>🔁 Looker Studio Page5（統合ビュー）</li>
+              </ul>
+            </div>
+            <div style="background:#faf5ff;border:1px solid #ddd6fe;border-radius:8px;padding:12px 16px;">
+              <div style="font-size:11px;font-weight:700;color:#6d28d9;margin-bottom:8px;letter-spacing:1px;">⏳ 4/24 納品時</div>
+              <ul style="font-size:13px;color:#5b21b6;line-height:2;list-style:none;padding:0;">
+                <li>⏳ Looker Studio URL お渡し</li>
+                <li>⏳ 権限移譲・管理者設定</li>
+                <li>⏳ 最終マニュアルお渡し</li>
+              </ul>
+            </div>
+          </div>
+          <div style="background:#f8faff;border:1px solid #e0e7ff;border-radius:8px;padding:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <span style="font-size:12px;font-weight:700;color:#4338ca;">📋 進捗報告テキスト（コピー用）</span>
+              <button onclick="copyStatus()" style="font-size:11px;background:#4338ca;color:white;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;">コピー</button>
+            </div>
+            <pre id="status-copy-text" style="font-size:12.5px;line-height:1.9;color:#374151;white-space:pre-wrap;font-family:'Hiragino Sans','Meiryo',sans-serif;margin:0;">【進捗報告 2026-04-21】
+
+■完了済み
+✅ GA4 × BigQuery 連携（4/11〜 自動エクスポート継続中）
+✅ BQ分析テーブル 5種（KPI・ファネル・チャネル・ページ・統合）
+✅ AI月次レポート自動生成（毎月1日 AM9:00 → aspr.k.kamimura@gmail.com）
+✅ 改善施策スコアリング・自然言語QA
+✅ Looker Studio Page1（KPIサマリー）・Page2（ファネル分析）
+✅ GTMタグ設置（GTM-5B3L5372 / スクロール・CTA・フォーム）※4/21公開完了
+
+■進行中（4/22〜23 完成予定）
+🔁 Looker Studio Page3〜5（チャネル・ページ・統合ビュー）
+
+■4/24 納品予定
+⏳ Looker Studio URL お渡し・権限移譲・最終マニュアルお渡し
+
+仕様書・マニュアル:
+https://ai-flow-architect.github.io/ark-analytics-spec/</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ②: GTM測定 -->
+      <div id="tab-gtm" class="tab-content">
+        <div class="steps-list">
+          <div class="alert alert-green" style="margin:0;">
+            ✅ GTM-5B3L5372 へのタグ設置は<strong>4/21に完了</strong>しています。こちらは「何が計測されているか」の確認用です。
+          </div>
+          <div class="tag-grid" style="padding:0;margin-top:0;">
+            <div class="tag-card">
+              <div class="t-num">タグ ①</div>
+              <div class="t-title">スクロール深度</div>
+              <div class="t-desc">ページをどこまで読んだかを自動計測。コンテンツの読了率・効果的な配置を把握できます。</div>
+              <div class="t-events">
+                <div class="t-event">scroll_depth（25%/50%/75%/90%）</div>
+              </div>
+            </div>
+            <div class="tag-card">
+              <div class="t-num">タグ ②</div>
+              <div class="t-title">CTAクリック</div>
+              <div class="t-desc">どのボタン・リンクがクリックされたかを自動計測。位置・種別・目的・識別名をすべて自動取得。</div>
+              <div class="t-events">
+                <div class="t-event">cta_click</div>
+                <div class="t-event">cta_location / cta_type</div>
+                <div class="t-event">cta_purpose / cta_id</div>
+              </div>
+            </div>
+            <div class="tag-card">
+              <div class="t-num">タグ ③</div>
+              <div class="t-title">フォーム操作</div>
+              <div class="t-desc">/contact/ ページのフォームで、入力開始・送信完了・途中離脱を自動計測。離脱原因の特定に活用。</div>
+              <div class="t-events">
+                <div class="t-event">form_start（入力開始）</div>
+                <div class="t-event">contact_finish（送信完了）</div>
+                <div class="t-event">form_abandon（途中離脱）</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">GA4で確認できるイベント（設置翌日以降）</h4>
+            <p style="font-size:13px;color:#4b5563;margin-bottom:8px;">GA4管理画面「レポート」→「リアルタイム」→「イベント数」に以下が表示されれば稼働中です：</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <code>scroll_depth</code><code>cta_click</code><code>form_start</code><code>contact_finish</code><code>form_abandon</code>
+            </div>
+          </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">計測データの活用方法</h4>
+            <table class="data-table">
+              <thead><tr><th>計測イベント</th><th>分析での表示箇所</th><th>改善への活用</th></tr></thead>
+              <tbody>
+                <tr><td><code>scroll_depth</code></td><td>Page4 ページパフォーマンス（scroll_90pct_rate）</td><td>読了率の低いページのコンテンツ改善</td></tr>
+                <tr><td><code>cta_click</code></td><td>Page4 ページパフォーマンス（cta_click_rate）</td><td>クリックされないCTAの位置・文言改善</td></tr>
+                <tr><td><code>contact_finish</code></td><td>Page2 ファネル分析（step5_submission）</td><td>問合せ数のKPI計測（月6件目標）</td></tr>
+                <tr><td><code>form_start</code> / <code>form_abandon</code></td><td>Page2 ファネル分析</td><td>フォーム離脱率の改善施策</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ③: よくある質問 -->
+      <div id="tab-faq" class="tab-content">
+        <div class="steps-list">
+          <div class="qa-wrap">
+            <div class="qa">
+              <div class="qa-header"><span class="qa-num">Q</span><span class="qa-q">GA4のデータはいつからBigQueryに入り始めますか？</span></div>
+              <div class="qa-body">
+                連携設定完了の <strong>翌日</strong> から自動エクスポートが開始されます。<br>
+                本プロジェクトでは <strong>4月11日（木）</strong> から蓄積が開始されており、日々データが積み上がっています。<br>
+                分析に十分な量が揃うのは <strong>約1ヶ月後</strong>（5月中旬以降）を目安としています。
+              </div>
+            </div>
+            <div class="qa">
+              <div class="qa-header"><span class="qa-num">Q</span><span class="qa-q">過去データ（4月11日以前）は取得できますか？</span></div>
+              <div class="qa-body">
+                GA4のBigQuery連携では、<strong>過去データの自動取得はできません</strong>。<br>
+                連携開始日（4/11）以降に発生したデータのみが蓄積されます。<br>
+                GA4管理画面では過去データを参照できますが、BQ連携・AI分析の対象外となります。
+              </div>
+            </div>
+            <div class="qa">
+              <div class="qa-header"><span class="qa-num">Q</span><span class="qa-q">CTAの「パートナー希望」フォームのコンバージョンはどう計測されますか？</span></div>
+              <div class="qa-body">
+                <a href="https://www.ark-hd.co.jp/contact/" target="_blank" style="color:#1a56db;">ark-hd.co.jp/contact/</a> の「パートナー希望」フォームの送信完了を<br>
+                GA4コンバージョンイベント <code>contact_finish</code> として計測します。<br>
+                月6件をKPIとして設定し、月次レポートに自動反映されます。
+              </div>
+            </div>
+            <div class="qa">
+              <div class="qa-header"><span class="qa-num">Q</span><span class="qa-q">納品後、自分たちで設定を変更することはできますか？</span></div>
+              <div class="qa-body">
+                はい、可能です。納品時に <strong>権限移譲・マニュアルのレクチャー</strong> を行います。<br>
+                メールアドレスの変更・レポート送信タイミングの調整などはノーコードで対応できます。<br>
+                構造的な変更が必要な場合は、五十嵐（kosuke.axson@gmail.com）までお問い合わせください。
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- タブ①: 自動処理 -->
@@ -645,211 +737,6 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
     </div>
   </div>
 
-  <!-- ④ GTM計測設定（確認用） -->
-  <div class="section" id="gtm">
-    <div class="section-title">🏷️ GTM計測設定（設置済み内容の確認）</div>
-
-    <div class="alert alert-green" style="margin-bottom:16px;">
-      ✅ GTM-5B3L5372 への3タグの設置は<strong>五十嵐が実施</strong>します。こちらのページは「何が計測されているか」の確認用です。トゥールル様による操作は不要です。
-    </div>
-
-    <!-- 3タグの説明カード -->
-    <div class="tag-grid" style="margin-bottom:16px;">
-      <div class="tag-card">
-        <div class="t-num">タグ ①</div>
-        <div class="t-title">スクロール深度</div>
-        <div class="t-desc">ページをどこまで読んだかを自動計測。コンテンツの読了率・効果的な配置を把握できます。</div>
-        <div class="t-events">
-          <div class="t-event">scroll_depth（25%/50%/75%/90%）</div>
-        </div>
-      </div>
-      <div class="tag-card">
-        <div class="t-num">タグ ②</div>
-        <div class="t-title">CTAクリック</div>
-        <div class="t-desc">どのボタン・リンクがクリックされたかを自動計測。位置・種別・目的・識別名をすべて自動取得。</div>
-        <div class="t-events">
-          <div class="t-event">cta_click</div>
-          <div class="t-event">cta_location / cta_type</div>
-          <div class="t-event">cta_purpose / cta_id</div>
-        </div>
-      </div>
-      <div class="tag-card">
-        <div class="t-num">タグ ③</div>
-        <div class="t-title">フォーム操作</div>
-        <div class="t-desc">/contact/ ページのフォームで、入力開始・送信完了・途中離脱を自動計測。離脱原因の特定に活用。</div>
-        <div class="t-events">
-          <div class="t-event">form_start（入力開始）</div>
-          <div class="t-event">contact_finish（送信完了）</div>
-          <div class="t-event">form_abandon（途中離脱）</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 設置後の確認方法（読むだけ） -->
-    <div class="card">
-      <div class="steps-list">
-        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 16px;font-size:13px;color:#14532d;">
-          <strong>🔧 設置は五十嵐が実施します。</strong><br>
-          GTM管理画面（GTM-5B3L5372）へのアクセス権限（kosuke.axson@gmail.com）を付与いただいており、五十嵐が直接タグを設置・公開します。
-        </div>
-
-        <div>
-          <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">設置完了後にGA4で確認できるイベント（設置翌日以降）</h4>
-          <p style="font-size:13px;color:#4b5563;margin-bottom:8px;">GA4管理画面「レポート」→「リアルタイム」→「イベント数（イベント名別）」に以下が表示されれば稼働中です：</p>
-          <div style="display:flex;flex-wrap:wrap;gap:6px;">
-            <code>scroll_depth</code><code>cta_click</code><code>form_start</code><code>contact_finish</code><code>form_abandon</code>
-          </div>
-        </div>
-
-        <div>
-          <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">計測データの活用方法</h4>
-          <table class="data-table">
-            <thead><tr><th>計測イベント</th><th>Looker Studioでの表示箇所</th><th>改善への活用</th></tr></thead>
-            <tbody>
-              <tr><td><code>scroll_depth</code></td><td>Page4 ページパフォーマンス<br>（scroll_90pct_rate）</td><td>読了率の低いページのコンテンツ改善</td></tr>
-              <tr><td><code>cta_click</code></td><td>Page4 ページパフォーマンス<br>（cta_click_rate）</td><td>クリックされないCTAの位置・文言改善</td></tr>
-              <tr><td><code>contact_finish</code></td><td>Page2 ファネル分析<br>（step5_submission）</td><td>問合せ数のKPI計測（月6件目標）</td></tr>
-              <tr><td><code>form_start</code> / <code>form_abandon</code></td><td>Page2 ファネル分析</td><td>フォーム離脱率の改善施策</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ⑤ Looker Studio ダッシュボード -->
-  <div class="section" id="looker">
-    <div class="section-title">📈 Looker Studio ダッシュボード（構成と閲覧方法）</div>
-
-    <div class="alert alert-green" style="margin-bottom:16px;">
-      ✅ ダッシュボードの構築は<strong>五十嵐が実施</strong>します。Page3〜5は4/22〜23に完成予定です。完成後にURLをお送りします。トゥールル様による設定操作は不要です。
-    </div>
-
-    <!-- ページ構成 -->
-    <div class="card" style="margin-bottom:16px;">
-      <table class="progress-table">
-        <thead><tr><th>ページ</th><th>名称・用途</th><th>主な指標</th><th>状態</th></tr></thead>
-        <tbody>
-          <tr class="done">
-            <td><b>Page1</b></td>
-            <td>KPIサマリー<br><small style="color:#6b7280;">経営層向け。月次KPIを一目で把握</small></td>
-            <td>月間セッション・CVR・問合せ数・エンゲージメント率</td>
-            <td><span class="badge b-done">✅ 完成</span></td>
-          </tr>
-          <tr class="done">
-            <td><b>Page2</b></td>
-            <td>ファネル分析<br><small style="color:#6b7280;">訪問→問合せの転換率を可視化</small></td>
-            <td>ステップ別到達率・転換率（5ステップ）</td>
-            <td><span class="badge b-done">✅ 完成</span></td>
-          </tr>
-          <tr class="wip">
-            <td><b>Page3</b></td>
-            <td>チャネル別分析<br><small style="color:#6b7280;">流入経路ごとの効果比較</small></td>
-            <td>チャネル別セッション・CVR・エンゲージメント率</td>
-            <td><span class="badge b-wip">🔁 4/22完成予定</span></td>
-          </tr>
-          <tr class="wip">
-            <td><b>Page4</b></td>
-            <td>ページパフォーマンス<br><small style="color:#6b7280;">改善優先ページの特定</small></td>
-            <td>PV・平均滞在時間・スクロール率・CTAクリック率・CV数</td>
-            <td><span class="badge b-wip">🔁 4/22完成予定</span></td>
-          </tr>
-          <tr class="wip">
-            <td><b>Page5</b></td>
-            <td>統合ダッシュボード<br><small style="color:#6b7280;">全データを一画面で俯瞰</small></td>
-            <td>KPI・ファネル・チャネル統合ビュー</td>
-            <td><span class="badge b-wip">🔁 4/23完成予定</span></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- 閲覧方法 -->
-    <div class="card">
-      <div class="steps-list">
-        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 16px;font-size:13px;color:#1e40af;">
-          <strong>👀 閲覧方法</strong><br>
-          完成後に共有URLをお送りします。<code>aspr.k.kamimura@gmail.com</code> でGoogleにログインした状態でURLを開くだけで確認できます。
-        </div>
-
-        <div>
-          <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">各ページの見方</h4>
-          <table class="data-table">
-            <thead><tr><th>ページ</th><th>どんな問いに答えるか</th><th>推奨確認頻度</th></tr></thead>
-            <tbody>
-              <tr><td>Page1 KPIサマリー</td><td>「今月の目標達成状況は？」「先月より改善した？」</td><td>月1回（月次レポートと合わせて）</td></tr>
-              <tr><td>Page2 ファネル</td><td>「どのステップで訪問者が離脱しているか？」</td><td>月1回〜週1回</td></tr>
-              <tr><td>Page3 チャネル別</td><td>「どの流入経路がもっとも問合せに繋がっているか？」</td><td>月1回</td></tr>
-              <tr><td>Page4 ページ別</td><td>「どのページを優先して改善すべきか？」</td><td>施策実施時</td></tr>
-              <tr><td>Page5 統合</td><td>「全体の状況をざっくり把握したい」</td><td>週1回</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div>
-          <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">日付範囲の変更方法</h4>
-          <p style="font-size:13px;color:#4b5563;">画面右上の <strong>日付範囲コントロール</strong> から期間を変更できます。デフォルトは「過去30日間」です。月次で比較したい場合は「先月」を選択してください。</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ⑥ よくある質問 -->
-  <div class="section" id="faq">
-    <div class="section-title">❓ よくある質問</div>
-    <div class="qa-wrap">
-
-      <div class="qa">
-        <div class="qa-header">
-          <span class="qa-num">Q</span>
-          <span class="qa-q">GA4のデータはいつからBigQueryに入り始めますか？</span>
-        </div>
-        <div class="qa-body">
-          連携設定完了の <strong>翌日</strong> から自動エクスポートが開始されます。<br>
-          本プロジェクトでは <strong>4月11日（木）</strong> から蓄積が開始されており、日々データが積み上がっています。<br>
-          分析に十分な量が揃うのは <strong>約1ヶ月後</strong>（5月中旬以降）を目安としています。
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="qa-header">
-          <span class="qa-num">Q</span>
-          <span class="qa-q">過去データ（4月11日以前）は取得できますか？</span>
-        </div>
-        <div class="qa-body">
-          GA4のBigQuery連携では、<strong>過去データの自動取得はできません</strong>。<br>
-          連携開始日（4/11）以降に発生したデータのみが蓄積されます。<br>
-          GA4管理画面では過去データを参照できますが、BQ連携・AI分析の対象外となります。この点はご了承ください。
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="qa-header">
-          <span class="qa-num">Q</span>
-          <span class="qa-q">CTAの「パートナー希望」フォームのコンバージョンはどう計測されますか？</span>
-        </div>
-        <div class="qa-body">
-          <a href="https://www.ark-hd.co.jp/contact/" target="_blank" style="color:#1a56db;">ark-hd.co.jp/contact/</a> の「パートナー希望」フォームの送信完了を<br>
-          GA4コンバージョンイベント <code>contact_finish</code> として計測します。<br>
-          月6件をKPIとして設定し、Looker Studioダッシュボード・月次レポートに自動反映されます。
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="qa-header">
-          <span class="qa-num">Q</span>
-          <span class="qa-q">納品後、自分たちで設定を変更することはできますか？</span>
-        </div>
-        <div class="qa-body">
-          はい、可能です。納品時に <strong>権限移譲・マニュアルのレクチャー</strong> を行います。<br>
-          変更頻度が高い項目はConfig（<code>config/settings.yaml</code>）で管理しており、<br>
-          メールアドレスの変更・レポート送信タイミングの調整などはノーコードで対応できます。<br>
-          構造的な変更が必要な場合は、五十嵐までお問い合わせください。
-        </div>
-      </div>
-
-    </div>
-  </div>
 
 </div>
 
