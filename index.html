@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GA4×BigQuery×AI 分析基盤 仕様書 | ARK</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Hiragino Sans", "Meiryo", sans-serif;
+      background: #f4f6fa;
+      color: #2d3748;
+      line-height: 1.7;
+    }
+    header {
+      background: linear-gradient(135deg, #0f4c81 0%, #1a56db 60%, #2563eb 100%);
+      color: white;
+      padding: 36px 48px 28px;
+    }
+    header .label { font-size: 11px; letter-spacing: 2px; opacity: 0.7; text-transform: uppercase; margin-bottom: 6px; }
+    header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    header .meta { font-size: 12px; opacity: 0.75; }
+    header .progress-bar-wrap { margin-top: 16px; background: rgba(255,255,255,0.2); border-radius: 99px; height: 8px; max-width: 340px; }
+    header .progress-bar-fill { background: #93c5fd; height: 8px; border-radius: 99px; width: 75%; position: relative; }
+    header .progress-label { font-size: 11px; opacity: 0.85; margin-top: 5px; }
+
+    nav {
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    nav ul { display: flex; gap: 0; max-width: 960px; margin: 0 auto; list-style: none; overflow-x: auto; }
+    nav ul li a {
+      display: block; padding: 14px 20px; font-size: 13px; font-weight: 600;
+      color: #64748b; text-decoration: none; white-space: nowrap;
+      border-bottom: 3px solid transparent;
+    }
+    nav ul li a:hover, nav ul li a.active { color: #1a56db; border-bottom-color: #1a56db; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 36px 24px 80px; }
+
+    .section { margin-bottom: 40px; scroll-margin-top: 56px; }
+    .section-title {
+      font-size: 16px; font-weight: 700; color: #1a56db;
+      border-left: 4px solid #1a56db; padding-left: 12px; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .card {
+      background: white; border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07); overflow: hidden;
+    }
+
+    /* ── システム構成フロー ── */
+    .flow-diagram {
+      background: white; border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+      padding: 32px 24px 28px;
+    }
+    .flow-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .input-box {
+      background: #f0f9ff; border: 2px solid #38bdf8;
+      border-radius: 10px; padding: 10px 18px;
+      text-align: center; font-size: 13px; font-weight: 600; color: #0369a1;
+      min-width: 130px;
+    }
+    .input-box .icon { font-size: 20px; display: block; margin-bottom: 3px; }
+    .arrow-down { text-align: center; color: #94a3b8; font-size: 20px; margin: 4px 0; }
+    .arrow-label { text-align: center; font-size: 11px; color: #94a3b8; margin-top: -12px; margin-bottom: 8px; }
+
+    .phase { border-radius: 12px; padding: 16px 20px 12px; margin-bottom: 12px; }
+    .phase-bq    { background: #eff6ff; border: 2px solid #3b82f6; }
+    .phase-ai    { background: #faf5ff; border: 2px solid #8b5cf6; }
+    .phase-out   { background: #f0fdf4; border: 2px solid #22c55e; }
+    .phase-gtm   { background: #fff7ed; border: 2px solid #f97316; }
+    .phase-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px; }
+    .phase-bq  .phase-label { color: #1d4ed8; }
+    .phase-ai  .phase-label { color: #6d28d9; }
+    .phase-out .phase-label { color: #15803d; }
+    .phase-gtm .phase-label { color: #c2410c; }
+    .phase-steps { display: flex; gap: 0; align-items: center; flex-wrap: wrap; }
+    .step-box {
+      background: white; border-radius: 8px; padding: 10px 12px; text-align: center;
+      font-size: 12.5px; line-height: 1.4; flex: 1; min-width: 110px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    .step-box .step-num { font-size: 11px; font-weight: 700; color: #64748b; display: block; margin-bottom: 3px; }
+    .step-box b { font-weight: 700; color: #1e293b; font-size: 12px; }
+    .step-box small { display: block; font-size: 11px; color: #64748b; margin-top: 2px; }
+    .step-arrow { color: #94a3b8; font-size: 18px; padding: 0 4px; flex-shrink: 0; }
+
+    .output-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 4px; }
+    .output-card {
+      background: white; border-radius: 10px; padding: 14px 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center;
+    }
+    .output-card .o-icon { font-size: 22px; margin-bottom: 6px; }
+    .output-card .o-title { font-size: 12.5px; font-weight: 700; color: #1e293b; }
+    .output-card .o-sub { font-size: 11px; color: #64748b; margin-top: 3px; }
+
+    /* 進捗テーブル */
+    .progress-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    .progress-table th { background: #1e293b; color: white; padding: 10px 16px; text-align: left; font-weight: 600; }
+    .progress-table td { padding: 10px 16px; border-bottom: 1px solid #e8edf4; vertical-align: top; }
+    .progress-table tr:last-child td { border-bottom: none; }
+    .progress-table tr.done td { background: #f0fdf4; }
+    .progress-table tr.wip  td { background: #eff6ff; }
+
+    .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; }
+    .b-done   { background: #dcfce7; color: #15803d; }
+    .b-wip    { background: #dbeafe; color: #1d4ed8; }
+    .b-wait   { background: #fef9c3; color: #854d0e; }
+    .b-auto   { background: #dbeafe; color: #1d4ed8; }
+    .b-manual { background: #ede9fe; color: #6d28d9; }
+    .b-check  { background: #fef9c3; color: #854d0e; }
+
+    /* マニュアル共通 */
+    .steps-list { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+    .step-item { display: flex; gap: 14px; align-items: flex-start; }
+    .step-num-circle {
+      background: #1a56db; color: white; font-size: 12px; font-weight: 700;
+      width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .step-content { flex: 1; }
+    .step-content h4 { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 4px; }
+    .step-content p { font-size: 13px; color: #4b5563; line-height: 1.7; }
+    .step-content code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: monospace; }
+    .step-content .code-block {
+      background: #1e293b; color: #e2e8f0; font-size: 12px; padding: 12px 16px;
+      border-radius: 8px; margin-top: 8px; font-family: monospace; line-height: 1.6; overflow-x: auto;
+    }
+    .step-content .note {
+      background: #fffbeb; border-left: 3px solid #f59e0b;
+      padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 12px; color: #78350f; margin-top: 8px;
+    }
+    .step-content .tip {
+      background: #f0fdf4; border-left: 3px solid #22c55e;
+      padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 12px; color: #14532d; margin-top: 8px;
+    }
+
+    /* タブ切り替え（マニュアルセクション用） */
+    .tab-nav { display: flex; gap: 4px; padding: 12px 16px 0; border-bottom: 1px solid #e2e8f0; background: white; border-radius: 10px 10px 0 0; flex-wrap: wrap; }
+    .tab-btn {
+      background: none; border: none; font-size: 13px; font-weight: 600;
+      color: #64748b; padding: 8px 16px; border-radius: 6px 6px 0 0; cursor: pointer;
+      border-bottom: 3px solid transparent; margin-bottom: -1px;
+    }
+    .tab-btn.active { color: #1a56db; border-bottom-color: #1a56db; background: #f8faff; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* テーブル共通 */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { background: #1e293b; color: white; padding: 9px 14px; text-align: left; font-weight: 600; }
+    .data-table td { padding: 10px 14px; border-bottom: 1px solid #e8edf4; vertical-align: top; }
+    .data-table tr:last-child td { border-bottom: none; }
+
+    /* GTM タグリスト */
+    .tag-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px; }
+    .tag-card { background: #f8faff; border: 2px solid #bfdbfe; border-radius: 10px; padding: 16px; }
+    .tag-card .t-num { font-size: 11px; font-weight: 700; color: #1d4ed8; margin-bottom: 6px; }
+    .tag-card .t-title { font-size: 14px; font-weight: 700; color: #1e293b; margin-bottom: 6px; }
+    .tag-card .t-desc { font-size: 12px; color: #4b5563; line-height: 1.6; }
+    .tag-card .t-events { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+    .tag-card .t-event { background: white; border-radius: 6px; padding: 4px 8px; font-size: 11px; font-family: monospace; color: #1d4ed8; }
+
+    /* QA */
+    .qa-wrap { display: flex; flex-direction: column; gap: 12px; }
+    .qa { background: white; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); overflow: hidden; }
+    .qa-header {
+      background: #fffbeb; border-bottom: 1px solid #fde68a;
+      padding: 12px 20px; display: flex; align-items: center; gap: 10px;
+    }
+    .qa-num { background: #f59e0b; color: white; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; white-space: nowrap; }
+    .qa-q { font-weight: 700; color: #92400e; font-size: 14px; }
+    .qa-body { padding: 14px 20px; font-size: 13.5px; color: #374151; line-height: 1.8; }
+
+    /* アラートバナー */
+    .alert { border-radius: 10px; padding: 14px 18px; font-size: 13px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .alert-blue  { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+    .alert-green { background: #f0fdf4; border: 1px solid #bbf7d0; color: #14532d; }
+    .alert-orange { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; }
+
+    footer { text-align: center; font-size: 12px; color: #94a3b8; padding: 28px; border-top: 1px solid #e2e8f0; }
+
+    @media (max-width: 640px) {
+      header { padding: 24px 20px; }
+      .container { padding: 20px 16px 60px; }
+      .tag-grid { grid-template-columns: 1fr; }
+      .output-grid { grid-template-columns: 1fr; }
+      .phase-steps { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="label">System Specification</div>
+  <h1>GA4 × BigQuery × AI 分析基盤 仕様書</h1>
+  <div class="meta">作成日: 2026-04-21 &nbsp;|&nbsp; 宛先: ARK株式会社 トゥールル様 &nbsp;|&nbsp; ステータス: 開発中</div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
+  <div class="progress-label">全体進捗: 75% 完了（4/24 納品予定）</div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#flow" class="active">システム構成</a></li>
+    <li><a href="#progress">進捗状況</a></li>
+    <li><a href="#manual">運用マニュアル</a></li>
+    <li><a href="#gtm">GTMタグ</a></li>
+    <li><a href="#looker">Looker Studio</a></li>
+    <li><a href="#faq">よくある質問</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <!-- ① システム構成フロー -->
+  <div class="section" id="flow">
+    <div class="section-title">📐 システム構成フロー</div>
+    <div class="flow-diagram">
+
+      <!-- 入力 -->
+      <div class="flow-row">
+        <div class="input-box">
+          <span class="icon">🌐</span>
+          ark-hd.co.jp<br>
+          <small style="font-weight:400;font-size:11px;color:#0369a1;">Webサイト訪問・クリック・フォーム</small>
+        </div>
+        <div class="input-box">
+          <span class="icon">📊</span>
+          GA4（プロパティ386840839）<br>
+          <small style="font-weight:400;font-size:11px;color:#0369a1;">自動イベント収集</small>
+        </div>
+        <div class="input-box">
+          <span class="icon">🏷️</span>
+          GTM-5B3L5372<br>
+          <small style="font-weight:400;font-size:11px;color:#0369a1;">カスタムイベント計測</small>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="arrow-label">毎日自動エクスポート（翌日反映）</div>
+
+      <!-- BigQuery -->
+      <div class="phase phase-bq">
+        <div class="phase-label">🗄️ BIGQUERY（ark-hd-analytics プロジェクト）</div>
+        <div class="phase-steps">
+          <div class="step-box"><span class="step-num">①</span><b>生データ受信</b><small>events_YYYYMMDD<br>テーブル自動生成</small></div>
+          <div class="step-arrow">→</div>
+          <div class="step-box"><span class="step-num">②</span><b>データ整形</b><small>stg_sessions<br>セッション集約</small></div>
+          <div class="step-arrow">→</div>
+          <div class="step-box"><span class="step-num">③</span><b>KPI集計</b><small>daily_kpi_summary<br>チャネル別・ページ別</small></div>
+          <div class="step-arrow">→</div>
+          <div class="step-box"><span class="step-num">④</span><b>ファネル分析</b><small>訪問→問合せ<br>4ステップ転換率</small></div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="arrow-label">毎朝4:00 自動バッチ処理</div>
+
+      <!-- AI処理 -->
+      <div class="phase phase-ai">
+        <div class="phase-label">🤖 AI分析エンジン（Python + GPT-4o）</div>
+        <div class="phase-steps">
+          <div class="step-box"><span class="step-num">⑤</span><b>自然言語QA</b><small>「どのページが<br>離脱多い？」即回答</small></div>
+          <div class="step-arrow">→</div>
+          <div class="step-box"><span class="step-num">⑥</span><b>改善施策<br>スコアリング</b><small>優先度TOP5<br>自動算出</small></div>
+          <div class="step-arrow">→</div>
+          <div class="step-box"><span class="step-num">⑦</span><b>月次レポート<br>自動生成</b><small>経営層・実務層<br>向け2本立て</small></div>
+        </div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="arrow-label">毎月1日 AM9:00 自動配信 / Looker Studio リアルタイム</div>
+
+      <!-- アウトプット -->
+      <div class="output-grid">
+        <div class="output-card">
+          <div class="o-icon">📈</div>
+          <div class="o-title">Looker Studio</div>
+          <div class="o-sub">リアルタイム<br>ダッシュボード（5ページ）</div>
+        </div>
+        <div class="output-card">
+          <div class="o-icon">📧</div>
+          <div class="o-title">月次メールレポート</div>
+          <div class="o-sub">aspr.k.kamimura@gmail.com<br>毎月1日 AM9:00 自動送信</div>
+        </div>
+        <div class="output-card">
+          <div class="o-icon">💬</div>
+          <div class="o-title">AI自然言語QA</div>
+          <div class="o-sub">テキストで質問 →<br>BQデータを即回答</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 進捗状況 -->
+  <div class="section" id="progress">
+    <div class="section-title">✅ 実装進捗状況</div>
+    <div class="card">
+      <table class="progress-table">
+        <thead>
+          <tr>
+            <th>フェーズ</th>
+            <th>内容</th>
+            <th style="width:80px;text-align:center;">進捗</th>
+            <th style="width:90px;text-align:center;">完了日</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="done">
+            <td><b>Phase①</b></td>
+            <td>GCPプロジェクト作成 / GA4（386840839）× BigQuery 連携設定</td>
+            <td style="text-align:center;"><span class="badge b-done">✅ 100%</span></td>
+            <td style="text-align:center;font-size:12px;">4/10〜12</td>
+          </tr>
+          <tr class="done">
+            <td><b>Phase②</b></td>
+            <td>BigQuery分析クエリ5テーブル設計・実装（KPI・ファネル・チャネル・ページ・統合）</td>
+            <td style="text-align:center;"><span class="badge b-done">✅ 100%</span></td>
+            <td style="text-align:center;font-size:12px;">4/13〜16</td>
+          </tr>
+          <tr class="done">
+            <td><b>Phase③-A</b></td>
+            <td>AI月次レポート自動生成（毎月1日 AM9:00 → aspr.k.kamimura@gmail.com）</td>
+            <td style="text-align:center;"><span class="badge b-done">✅ 100%</span></td>
+            <td style="text-align:center;font-size:12px;">4/17</td>
+          </tr>
+          <tr class="done">
+            <td><b>Phase③-B</b></td>
+            <td>改善施策スコアリング・自然言語QA</td>
+            <td style="text-align:center;"><span class="badge b-done">✅ 100%</span></td>
+            <td style="text-align:center;font-size:12px;">4/19</td>
+          </tr>
+          <tr class="done">
+            <td><b>Phase③-C</b></td>
+            <td>Looker Studio Page1（KPIサマリー）・Page2（ファネル）</td>
+            <td style="text-align:center;"><span class="badge b-done">✅ 100%</span></td>
+            <td style="text-align:center;font-size:12px;">4/19</td>
+          </tr>
+          <tr class="wip">
+            <td><b>Phase④</b></td>
+            <td>Looker Studio Page3〜5（チャネル・ページ・統合ビュー）構築</td>
+            <td style="text-align:center;"><span class="badge b-wip">🔁 着手中</span></td>
+            <td style="text-align:center;font-size:12px;">4/22〜23</td>
+          </tr>
+          <tr class="wip">
+            <td><b>Phase④</b></td>
+            <td>GTMタグ設置（GTM-5B3L5372 / スクロール・CTA・フォーム 3種）</td>
+            <td style="text-align:center;"><span class="badge b-wip">🔁 着手中</span></td>
+            <td style="text-align:center;font-size:12px;">4/21</td>
+          </tr>
+          <tr>
+            <td><b>Phase⑤</b></td>
+            <td>権限移譲・全体レクチャー・マニュアル最終版お渡し</td>
+            <td style="text-align:center;"><span class="badge b-wait">⏳ 予定</span></td>
+            <td style="text-align:center;font-size:12px;">4/24</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ③ 運用マニュアル -->
+  <div class="section" id="manual">
+    <div class="section-title">📖 運用マニュアル</div>
+
+    <div class="alert alert-blue" style="margin-bottom:16px;">
+      💡 本分析基盤は <strong>完全自動運転</strong> で設計されています。毎朝4:00のバッチ処理・毎月1日のレポート配信はすべて自動です。日常操作は不要です。
+    </div>
+
+    <!-- タブ -->
+    <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab(this,'tab-auto')">① 自動処理（操作不要）</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-qa')">② 自然言語QA</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-scorer')">③ 改善スコアリング</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-report')">④ 月次レポート</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-trouble')">⑤ トラブル対処</button>
+      </div>
+
+      <!-- タブ①: 自動処理 -->
+      <div id="tab-auto" class="tab-content active">
+        <div class="steps-list">
+          <div class="alert alert-green" style="margin:0;">
+            ✅ 以下はすべて <strong>自動実行</strong> されます。何もしなくてOKです。
+          </div>
+          <table class="data-table" style="margin-top:0;">
+            <thead>
+              <tr>
+                <th>処理内容</th>
+                <th>実行タイミング</th>
+                <th>確認先</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>GA4 → BigQuery エクスポート</td>
+                <td>毎日（翌日AM頃）</td>
+                <td>BigQuery コンソール<br><code>analytics_386840839.events_*</code></td>
+              </tr>
+              <tr>
+                <td>BQ分析テーブル更新</td>
+                <td>毎朝 4:00</td>
+                <td>BQ → <code>marts.*</code> テーブル</td>
+              </tr>
+              <tr>
+                <td>月次レポート自動生成・メール送信</td>
+                <td>毎月1日 AM9:00</td>
+                <td>aspr.k.kamimura@gmail.com の受信箱</td>
+              </tr>
+              <tr>
+                <td>Looker Studio ダッシュボード更新</td>
+                <td>BQ更新と連動（常時最新）</td>
+                <td>Looker Studio レポートURL</td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">データ更新ログの確認方法</h4>
+            <div class="code-block">
+# 今日のバッチ処理ログを確認<br>
+cat /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%d').log<br><br>
+# 最新ログをリアルタイム確認<br>
+tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%d').log
+            </div>
+            <div class="note">※ このコマンドは五十嵐側のサーバーで実行します。エラーが出た場合は五十嵐までご連絡ください。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ②: 自然言語QA -->
+      <div id="tab-qa" class="tab-content">
+        <div class="steps-list">
+          <div class="alert alert-blue" style="margin:0;">
+            📊 BigQueryのデータをもとに、テキストで質問するとAIが即座に回答します。
+          </div>
+          <div class="step-item">
+            <div class="step-num-circle">1</div>
+            <div class="step-content">
+              <h4>実行コマンド</h4>
+              <div class="code-block">
+cd /home/kosuke_igarashi/projects/ark-analytics<br><br>
+# 1問だけ質問する場合<br>
+python3 main.py --report-type qa --question "どのページが一番離脱が多いですか？"<br><br>
+# 連続して複数質問する場合（対話モード）<br>
+python3 main.py --report-type qa
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num-circle">2</div>
+            <div class="step-content">
+              <h4>対話モードの使い方</h4>
+              <div class="code-block">
+=== GA4 AI自然言語アナリスト ===<br>
+質問を入力してください（'exit' で終了）<br><br>
+質問&gt; どのページが一番訪問が多いですか？<br>
+→ AIが実際のBQデータを引いて回答します<br><br>
+質問> 先月のコンバージョン率はどうでしたか？<br>
+→ 数値を引用した分析回答が表示されます<br><br>
+質問&gt; exit
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num-circle">3</div>
+            <div class="step-content">
+              <h4>おすすめの質問例</h4>
+              <table class="data-table">
+                <thead><tr><th>カテゴリ</th><th>質問例</th></thead>
+                <tbody>
+                  <tr><td>ページ分析</td><td>「どのページが一番離脱が多いですか？」</td></tr>
+                  <tr><td>チャネル分析</td><td>「どの流入経路がCVRが高いですか？」</td></tr>
+                  <tr><td>ファネル分析</td><td>「フォームのどこで一番離脱しますか？」</td></tr>
+                  <tr><td>KPI確認</td><td>「今月のセッション数の傾向は？」</td></tr>
+                  <tr><td>総合分析</td><td>「今週の改善ポイントをまとめてください」</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ③: 改善スコアリング -->
+      <div id="tab-scorer" class="tab-content">
+        <div class="steps-list">
+          <div class="alert alert-blue" style="margin:0;">
+            🎯 BQデータを自動分析し、今月取り組むべき改善施策をTOP5でランキング表示します。
+          </div>
+          <div class="step-item">
+            <div class="step-num-circle">1</div>
+            <div class="step-content">
+              <h4>実行コマンド</h4>
+              <div class="code-block">
+cd /home/kosuke_igarashi/projects/ark-analytics<br>
+python3 main.py --report-type scorer
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num-circle">2</div>
+            <div class="step-content">
+              <h4>出力イメージ</h4>
+              <div class="code-block">
+=== 改善施策 優先順位スコアリング ===<br><br>
+順位 | 対象         | 課題           | アクション             | 優先度 | 期待効果<br>
+  1 | /            | CTAクリック率低 | CTAボタンを目立つ位置に | 12    | 問合せ数15%向上<br>
+  2 | /contact/    | フォーム開始率低 | 入力項目削減           | 11    | CVR5%→8%<br>
+  ...
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num-circle">3</div>
+            <div class="step-content">
+              <h4>スコア計算式</h4>
+              <p>優先度スコア = <strong>インパクト × 2</strong> + 実行可能性 − 工数</p>
+              <div class="note">月初（月次レポートを受け取った後）に実行すると、今月の改善優先度が一目でわかります。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ④: 月次レポート -->
+      <div id="tab-report" class="tab-content">
+        <div class="steps-list">
+          <div class="alert alert-green" style="margin:0;">
+            📧 毎月1日 AM9:00 に <strong>aspr.k.kamimura@gmail.com</strong> へ自動送信されます。手動操作は不要です。
+          </div>
+          <div class="step-item">
+            <div class="step-num-circle">1</div>
+            <div class="step-content">
+              <h4>レポートの内容</h4>
+              <table class="data-table">
+                <thead><tr><th>パート</th><th>内容</th></thead>
+                <tbody>
+                  <tr><td>📊 経営層向けサマリー</td><td>月間KPI（セッション・CVR・問合せ数）、目標達成率、前月比、AIによる総評・推奨アクション3つ</td></tr>
+                  <tr><td>🔍 実務担当向け詳細</td><td>チャネル別分析、ファネル分析（どのステップで離脱が多いか）、改善優先ページTOP3</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num-circle">2</div>
+            <div class="step-content">
+              <h4>手動で今すぐ生成したい場合</h4>
+              <div class="code-block">
+cd /home/kosuke_igarashi/projects/ark-analytics<br><br>
+# 今月（先月分）のレポートを今すぐ生成<br>
+python3 main.py --report-type monthly<br><br>
+# 特定月のレポートを生成<br>
+python3 main.py --report-type monthly --month 2026-04<br><br>
+# プレビューのみ（メール送信なし）<br>
+python3 main.py --report-type monthly --dry-run --month 2026-04
+              </div>
+            </div>
+          </div>
+          <div class="step-item">
+            <div class="step-num-circle">3</div>
+            <div class="step-content">
+              <h4>配信先の追加・変更方法</h4>
+              <p><code>config/settings.yaml</code> の <code>report.recipients</code> にメールアドレスを追加してください。</p>
+              <div class="tip">テスト送信を希望される場合は五十嵐（kosuke.axson@gmail.com）にお声がけください。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ⑤: トラブル対処 -->
+      <div id="tab-trouble" class="tab-content">
+        <div class="steps-list">
+          <div class="qa-wrap">
+
+            <div class="qa">
+              <div class="qa-header">
+                <span class="qa-num">Q1</span>
+                <span class="qa-q">cronが実行されてもBQデータが更新されない</span>
+              </div>
+              <div class="qa-body">
+                <strong>① ログを確認</strong><br>
+                <code>cat /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%d').log</code><br><br>
+                <strong>② Google認証が切れていないか確認</strong><br>
+                <code>gcloud auth application-default print-access-token</code><br><br>
+                <strong>③ 認証が切れていた場合は再認証（五十嵐側で実施）</strong><br>
+                <code>gcloud auth application-default login --no-launch-browser</code>
+              </div>
+            </div>
+
+            <div class="qa">
+              <div class="qa-header">
+                <span class="qa-num">Q2</span>
+                <span class="qa-q">Looker Studioでグラフが空白になる</span>
+              </div>
+              <div class="qa-body">
+                <strong>原因</strong>: 日付フィルターの期間にデータがない可能性があります。<br>
+                <strong>対処</strong>: 日付範囲コントロールを「全期間」または「過去90日」に変更して確認してください。<br>
+                GA4エクスポートは24〜48時間後にBQに反映されます（正常挙動です）。
+              </div>
+            </div>
+
+            <div class="qa">
+              <div class="qa-header">
+                <span class="qa-num">Q3</span>
+                <span class="qa-q">月次レポートのメールが届かない</span>
+              </div>
+              <div class="qa-body">
+                <strong>① 迷惑メールフォルダ</strong>を確認してください。<br>
+                <strong>② OPENAI_API_KEY の環境変数</strong>が設定されているか確認が必要な場合は五十嵐まで連絡ください。<br>
+                <strong>③ テスト送信</strong>をご希望の場合: <code>python3 main.py --report-type monthly --dry-run</code>
+              </div>
+            </div>
+
+            <div class="qa">
+              <div class="qa-header">
+                <span class="qa-num">Q4</span>
+                <span class="qa-q">GTMタグが動作しているか確認したい</span>
+              </div>
+              <div class="qa-body">
+                <strong>① GTMプレビューモード</strong>で確認:
+                <a href="https://tagmanager.google.com/" target="_blank" style="color:#1a56db;">tagmanager.google.com</a>
+                → GTM-5B3L5372 → 「プレビュー」<br><br>
+                <strong>② GA4リアルタイムレポート</strong>:
+                GA4管理画面 → 「レポート」→「リアルタイム」→ イベント一覧に <code>scroll_depth</code> / <code>cta_click</code> が表示されるか確認<br><br>
+                <strong>③ BQ確認</strong>（24〜48時間後）:
+                <code>SELECT event_name, COUNT(*) FROM analytics_386840839.events_* WHERE _TABLE_SUFFIX >= '20260420' GROUP BY 1</code>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ GTMタグ設置手順 -->
+  <div class="section" id="gtm">
+    <div class="section-title">🏷️ GTMタグ設置手順</div>
+
+    <div class="alert alert-orange" style="margin-bottom:16px;">
+      📋 GTM-5B3L5372 に以下3種のタグを設置します。コードはすでに完成済みです。
+    </div>
+
+    <!-- 3タグの説明カード -->
+    <div class="tag-grid" style="margin-bottom:16px;">
+      <div class="tag-card">
+        <div class="t-num">タグ ①</div>
+        <div class="t-title">スクロール深度</div>
+        <div class="t-desc">ページをどこまで読んだかを計測。コンテンツの読了率・効果的な配置を把握する。</div>
+        <div class="t-events">
+          <div class="t-event">scroll_depth（25%/50%/75%/90%）</div>
+        </div>
+      </div>
+      <div class="tag-card">
+        <div class="t-num">タグ ②</div>
+        <div class="t-title">CTAクリック</div>
+        <div class="t-desc">どのボタン・リンクがクリックされたかを計測。位置・種別・目的・識別名を自動取得。</div>
+        <div class="t-events">
+          <div class="t-event">cta_click</div>
+          <div class="t-event">cta_location / cta_type</div>
+          <div class="t-event">cta_purpose / cta_id</div>
+        </div>
+      </div>
+      <div class="tag-card">
+        <div class="t-num">タグ ③</div>
+        <div class="t-title">フォーム操作</div>
+        <div class="t-desc">/contact/ ページのフォームで、入力開始・送信完了・途中離脱を計測。</div>
+        <div class="t-events">
+          <div class="t-event">form_start（入力開始）</div>
+          <div class="t-event">contact_finish（送信完了）</div>
+          <div class="t-event">form_abandon（途中離脱）</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 設置手順 -->
+    <div class="card">
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num-circle">1</div>
+          <div class="step-content">
+            <h4>GTM管理画面にアクセス</h4>
+            <p><a href="https://tagmanager.google.com/" target="_blank" style="color:#1a56db;">tagmanager.google.com</a> にアクセスし、コンテナ <code>GTM-5B3L5372</code> を開きます。</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num-circle">2</div>
+          <div class="step-content">
+            <h4>タグを新規追加</h4>
+            <p>「タグ」→「新規」→ タグの種類: <strong>カスタムHTML</strong> を選択します。</p>
+            <p style="margin-top:8px;">タグ名・コード・トリガーを下表の通りに設定してください。</p>
+            <table class="data-table" style="margin-top:8px;">
+              <thead><tr><th>タグ名</th><th>コード参照</th><th>トリガー</th></tr></thead>
+              <tbody>
+                <tr><td>GA4 - スクロール深度計測</td><td>GTM_TAGS.md ①</td><td>All Pages（DOM Ready）</td></tr>
+                <tr><td>GA4 - CTAクリック計測</td><td>GTM_TAGS.md ②</td><td>All Pages</td></tr>
+                <tr><td>GA4 - フォーム操作計測</td><td>GTM_TAGS.md ③</td><td>URL に /contact/ を含むページ</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num-circle">3</div>
+          <div class="step-content">
+            <h4>プレビューで動作確認</h4>
+            <p>「プレビュー」をクリック → GTMプレビューモードが起動します。</p>
+            <p>ark-hd.co.jp を開き、以下を確認してください：</p>
+            <table class="data-table" style="margin-top:8px;">
+              <thead><tr><th>確認操作</th><th>Firedになるタグ</th></tr></thead>
+              <tbody>
+                <tr><td>ページをスクロールする</td><td>GA4 - スクロール深度計測</td></tr>
+                <tr><td>お問い合わせボタンをクリックする</td><td>GA4 - CTAクリック計測</td></tr>
+                <tr><td>/contact/ でフォームを入力する</td><td>GA4 - フォーム操作計測</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num-circle">4</div>
+          <div class="step-content">
+            <h4>公開</h4>
+            <p>確認が取れたら「送信」→「公開」をクリックします。</p>
+            <p>バージョン名: <code>カスタムイベント計測タグ追加（2026-04）</code></p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num-circle">5</div>
+          <div class="step-content">
+            <h4>GA4で確認（設置翌日以降）</h4>
+            <p>GA4管理画面の「イベント」一覧に以下が表示されれば成功です：</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+              <code>scroll_depth</code><code>cta_click</code><code>form_start</code><code>contact_finish</code><code>form_abandon</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ Looker Studio設定手順 -->
+  <div class="section" id="looker">
+    <div class="section-title">📈 Looker Studio ダッシュボード設定手順</div>
+
+    <div class="alert alert-blue" style="margin-bottom:16px;">
+      📐 Page1・Page2は設定済みです。Page3〜5を <code>aspr.k.kamimura@gmail.com</code> アカウントで設定します。
+    </div>
+
+    <!-- ページ構成 -->
+    <div class="card" style="margin-bottom:16px;">
+      <table class="progress-table">
+        <thead><tr><th>ページ</th><th>名称</th><th>接続テーブル</th><th>状態</th></tr></thead>
+        <tbody>
+          <tr class="done"><td>Page1</td><td>KPIサマリー（経営層向け）</td><td>daily_kpi_summary</td><td><span class="badge b-done">✅ 完成</span></td></tr>
+          <tr class="done"><td>Page2</td><td>ファネル分析</td><td>conversion_funnel_daily</td><td><span class="badge b-done">✅ 完成</span></td></tr>
+          <tr class="wip"><td>Page3</td><td>チャネル別分析</td><td>channel_kpi_monthly</td><td><span class="badge b-wip">🔁 作業中</span></td></tr>
+          <tr class="wip"><td>Page4</td><td>ページパフォーマンス</td><td>page_performance</td><td><span class="badge b-wip">🔁 作業中</span></td></tr>
+          <tr class="wip"><td>Page5</td><td>統合ダッシュボード</td><td>rpt_looker_main</td><td><span class="badge b-wip">🔁 作業中</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 設置手順 -->
+    <div class="card">
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num-circle">1</div>
+          <div class="step-content">
+            <h4>Looker Studioにアクセス</h4>
+            <p><a href="https://lookerstudio.google.com/" target="_blank" style="color:#1a56db;">lookerstudio.google.com</a> に <strong>aspr.k.kamimura@gmail.com</strong> でログインします。</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num-circle">2</div>
+          <div class="step-content">
+            <h4>既存レポートにページを追加</h4>
+            <p>Page1・2が含まれる既存レポートを開き、「ページを追加」からPage3〜5を追加します。</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num-circle">3</div>
+          <div class="step-content">
+            <h4>BigQueryデータソースを接続</h4>
+            <p>「データソースを追加」→「BigQuery」を選択し、以下の順で接続します：</p>
+            <table class="data-table" style="margin-top:8px;">
+              <thead><tr><th>ページ</th><th>プロジェクト</th><th>データセット</th><th>テーブル</th></tr></thead>
+              <tbody>
+                <tr><td>Page3</td><td>ark-hd-analytics</td><td>marts</td><td>channel_kpi_monthly</td></tr>
+                <tr><td>Page4</td><td>ark-hd-analytics</td><td>marts</td><td>page_performance</td></tr>
+                <tr><td>Page5</td><td>ark-hd-analytics</td><td>reports</td><td>rpt_looker_main</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num-circle">4</div>
+          <div class="step-content">
+            <h4>各ページのチャートを設定</h4>
+            <table class="data-table">
+              <thead><tr><th>ページ</th><th>追加するチャート</th><th>ディメンション / 指標</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>Page3<br>チャネル別</td>
+                  <td>棒グラフ + 表</td>
+                  <td>ディメンション: <code>channel_grouping</code><br>指標: <code>sessions</code>, <code>conversion_rate</code>, <code>engagement_rate</code></td>
+                </tr>
+                <tr>
+                  <td>Page4<br>ページ別</td>
+                  <td>表</td>
+                  <td>ディメンション: <code>page_path</code><br>指標: <code>pageviews</code>, <code>avg_time_on_page_sec</code>, <code>scroll_90pct_rate</code>, <code>cta_click_rate</code>, <code>conversions_from_page</code></td>
+                </tr>
+                <tr>
+                  <td>Page5<br>統合</td>
+                  <td>スコアカード×4<br>+ 折れ線グラフ</td>
+                  <td>指標: <code>sessions</code>, <code>contact_form_submissions</code>, <code>overall_cvr</code>, <code>engagement_rate</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num-circle">5</div>
+          <div class="step-content">
+            <h4>日付フィルターを追加</h4>
+            <p>「コントロールを追加」→「日付範囲コントロール」を全ページに追加します。</p>
+            <p>デフォルト期間: <code>先月</code> または <code>過去30日間</code></p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num-circle">6</div>
+          <div class="step-content">
+            <h4>共有・公開設定</h4>
+            <p>「共有」→ <code>kosuke.axson@gmail.com</code> に閲覧者権限を付与します。</p>
+            <div class="note">権限エラーが出た場合: BigQueryコンソールで <code>ark-hd-analytics</code> プロジェクトに <code>BigQueryデータ閲覧者</code> ロールを付与してください。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑥ よくある質問 -->
+  <div class="section" id="faq">
+    <div class="section-title">❓ よくある質問</div>
+    <div class="qa-wrap">
+
+      <div class="qa">
+        <div class="qa-header">
+          <span class="qa-num">Q</span>
+          <span class="qa-q">GA4のデータはいつからBigQueryに入り始めますか？</span>
+        </div>
+        <div class="qa-body">
+          連携設定完了の <strong>翌日</strong> から自動エクスポートが開始されます。<br>
+          本プロジェクトでは <strong>4月11日（木）</strong> から蓄積が開始されており、日々データが積み上がっています。<br>
+          分析に十分な量が揃うのは <strong>約1ヶ月後</strong>（5月中旬以降）を目安としています。
+        </div>
+      </div>
+
+      <div class="qa">
+        <div class="qa-header">
+          <span class="qa-num">Q</span>
+          <span class="qa-q">過去データ（4月11日以前）は取得できますか？</span>
+        </div>
+        <div class="qa-body">
+          GA4のBigQuery連携では、<strong>過去データの自動取得はできません</strong>。<br>
+          連携開始日（4/11）以降に発生したデータのみが蓄積されます。<br>
+          GA4管理画面では過去データを参照できますが、BQ連携・AI分析の対象外となります。この点はご了承ください。
+        </div>
+      </div>
+
+      <div class="qa">
+        <div class="qa-header">
+          <span class="qa-num">Q</span>
+          <span class="qa-q">CTAの「パートナー希望」フォームのコンバージョンはどう計測されますか？</span>
+        </div>
+        <div class="qa-body">
+          <a href="https://www.ark-hd.co.jp/contact/" target="_blank" style="color:#1a56db;">ark-hd.co.jp/contact/</a> の「パートナー希望」フォームの送信完了を<br>
+          GA4コンバージョンイベント <code>contact_finish</code> として計測します。<br>
+          月6件をKPIとして設定し、Looker Studioダッシュボード・月次レポートに自動反映されます。
+        </div>
+      </div>
+
+      <div class="qa">
+        <div class="qa-header">
+          <span class="qa-num">Q</span>
+          <span class="qa-q">納品後、自分たちで設定を変更することはできますか？</span>
+        </div>
+        <div class="qa-body">
+          はい、可能です。納品時に <strong>権限移譲・マニュアルのレクチャー</strong> を行います。<br>
+          変更頻度が高い項目はConfig（<code>config/settings.yaml</code>）で管理しており、<br>
+          メールアドレスの変更・レポート送信タイミングの調整などはノーコードで対応できます。<br>
+          構造的な変更が必要な場合は、五十嵐までお問い合わせください。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 AIフローアーキテクト 五十嵐 &nbsp;|&nbsp; ARK株式会社 様 向け 仕様書
+</footer>
+
+<script>
+  // タブ切り替え
+  function switchTab(btn, tabId) {
+    const parent = btn.closest('[style*="background:white"]') || btn.parentElement.parentElement;
+    parent.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  // ナビのアクティブ切り替え
+  const navLinks = document.querySelectorAll('nav a');
+  const sections = document.querySelectorAll('.section');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+
+</body>
+</html>
