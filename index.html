@@ -207,8 +207,8 @@
     <li><a href="#flow" class="active">システム構成</a></li>
     <li><a href="#progress">進捗状況</a></li>
     <li><a href="#manual">運用マニュアル</a></li>
-    <li><a href="#gtm">GTMタグ</a></li>
-    <li><a href="#looker">Looker Studio</a></li>
+    <li><a href="#gtm">GTM計測設定</a></li>
+    <li><a href="#looker">ダッシュボード</a></li>
     <li><a href="#faq">よくある質問</a></li>
   </ul>
 </nav>
@@ -374,7 +374,7 @@
         <button class="tab-btn" onclick="switchTab(this,'tab-qa')">② 自然言語QA</button>
         <button class="tab-btn" onclick="switchTab(this,'tab-scorer')">③ 改善スコアリング</button>
         <button class="tab-btn" onclick="switchTab(this,'tab-report')">④ 月次レポート</button>
-        <button class="tab-btn" onclick="switchTab(this,'tab-trouble')">⑤ トラブル対処</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-trouble')">⑤ 困ったときは</button>
       </div>
 
       <!-- タブ①: 自動処理 -->
@@ -431,51 +431,33 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
       <div id="tab-qa" class="tab-content">
         <div class="steps-list">
           <div class="alert alert-blue" style="margin:0;">
-            📊 BigQueryのデータをもとに、テキストで質問するとAIが即座に回答します。
+            📊 BigQueryに蓄積されたデータをもとに、日本語で質問するとAIが即座に回答する機能です。
           </div>
-          <div class="step-item">
-            <div class="step-num-circle">1</div>
-            <div class="step-content">
-              <h4>実行コマンド</h4>
-              <div class="code-block">
-cd /home/kosuke_igarashi/projects/ark-analytics<br><br>
-# 1問だけ質問する場合<br>
-python3 main.py --report-type qa --question "どのページが一番離脱が多いですか？"<br><br>
-# 連続して複数質問する場合（対話モード）<br>
-python3 main.py --report-type qa
-              </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">仕組み</h4>
+            <div style="background:#f8faff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;font-size:13px;color:#374151;line-height:1.8;">
+              「どのページが一番離脱が多いですか？」<br>
+              　　↓<br>
+              BigQueryから実際のデータを自動取得<br>
+              　　↓<br>
+              GPT-4oが数値を引用して分析・回答<br>
+              　　↓<br>
+              「/contact/ ページの離脱率が42%と最も高く、フォーム開始後の離脱が主因です」
             </div>
           </div>
-          <div class="step-item">
-            <div class="step-num-circle">2</div>
-            <div class="step-content">
-              <h4>対話モードの使い方</h4>
-              <div class="code-block">
-=== GA4 AI自然言語アナリスト ===<br>
-質問を入力してください（'exit' で終了）<br><br>
-質問&gt; どのページが一番訪問が多いですか？<br>
-→ AIが実際のBQデータを引いて回答します<br><br>
-質問> 先月のコンバージョン率はどうでしたか？<br>
-→ 数値を引用した分析回答が表示されます<br><br>
-質問&gt; exit
-              </div>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-num-circle">3</div>
-            <div class="step-content">
-              <h4>おすすめの質問例</h4>
-              <table class="data-table">
-                <thead><tr><th>カテゴリ</th><th>質問例</th></thead>
-                <tbody>
-                  <tr><td>ページ分析</td><td>「どのページが一番離脱が多いですか？」</td></tr>
-                  <tr><td>チャネル分析</td><td>「どの流入経路がCVRが高いですか？」</td></tr>
-                  <tr><td>ファネル分析</td><td>「フォームのどこで一番離脱しますか？」</td></tr>
-                  <tr><td>KPI確認</td><td>「今月のセッション数の傾向は？」</td></tr>
-                  <tr><td>総合分析</td><td>「今週の改善ポイントをまとめてください」</td></tr>
-                </tbody>
-              </table>
-            </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">こんな質問ができます</h4>
+            <table class="data-table">
+              <thead><tr><th>カテゴリ</th><th>質問例</th></thead>
+              <tbody>
+                <tr><td>ページ分析</td><td>「どのページが一番離脱が多いですか？」</td></tr>
+                <tr><td>チャネル分析</td><td>「どの流入経路がCVRが高いですか？」</td></tr>
+                <tr><td>ファネル分析</td><td>「フォームのどこで一番離脱しますか？」</td></tr>
+                <tr><td>KPI確認</td><td>「今月のセッション数の傾向は？」</td></tr>
+                <tr><td>総合分析</td><td>「今週の改善ポイントをまとめてください」</td></tr>
+              </tbody>
+            </table>
+            <div class="note" style="margin-top:8px;">ご質問がある場合は五十嵐（kosuke.axson@gmail.com）にご連絡いただければ、BQデータを引いて即回答いたします。</div>
           </div>
         </div>
       </div>
@@ -484,38 +466,23 @@ python3 main.py --report-type qa
       <div id="tab-scorer" class="tab-content">
         <div class="steps-list">
           <div class="alert alert-blue" style="margin:0;">
-            🎯 BQデータを自動分析し、今月取り組むべき改善施策をTOP5でランキング表示します。
+            🎯 BQデータを自動分析し、今月取り組むべき改善施策をTOP5でランキング表示する機能です。<strong>月次レポートに自動で含まれます</strong>。
           </div>
-          <div class="step-item">
-            <div class="step-num-circle">1</div>
-            <div class="step-content">
-              <h4>実行コマンド</h4>
-              <div class="code-block">
-cd /home/kosuke_igarashi/projects/ark-analytics<br>
-python3 main.py --report-type scorer
-              </div>
-            </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">スコアリング結果のイメージ</h4>
+            <table class="data-table">
+              <thead><tr><th>順位</th><th>対象ページ</th><th>課題</th><th>推奨アクション</th><th>期待効果</th></tr></thead>
+              <tbody>
+                <tr><td>1位</td><td>/（TOPページ）</td><td>CTAクリック率が低い</td><td>CTAボタンをファーストビューに配置</td><td>問合せ数15%向上</td></tr>
+                <tr><td>2位</td><td>/contact/</td><td>フォーム開始率が低い</td><td>入力項目を削減（5項目→3項目）</td><td>CVR 5%→8%</td></tr>
+                <tr><td>3位</td><td>/service/</td><td>直帰率が高い</td><td>ページ冒頭にベネフィット訴求を追加</td><td>直帰率15%改善</td></tr>
+              </tbody>
+            </table>
           </div>
-          <div class="step-item">
-            <div class="step-num-circle">2</div>
-            <div class="step-content">
-              <h4>出力イメージ</h4>
-              <div class="code-block">
-=== 改善施策 優先順位スコアリング ===<br><br>
-順位 | 対象         | 課題           | アクション             | 優先度 | 期待効果<br>
-  1 | /            | CTAクリック率低 | CTAボタンを目立つ位置に | 12    | 問合せ数15%向上<br>
-  2 | /contact/    | フォーム開始率低 | 入力項目削減           | 11    | CVR5%→8%<br>
-  ...
-              </div>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-num-circle">3</div>
-            <div class="step-content">
-              <h4>スコア計算式</h4>
-              <p>優先度スコア = <strong>インパクト × 2</strong> + 実行可能性 − 工数</p>
-              <div class="note">月初（月次レポートを受け取った後）に実行すると、今月の改善優先度が一目でわかります。</div>
-            </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">スコア計算の仕組み</h4>
+            <p style="font-size:13px;color:#4b5563;">優先度スコア = <strong>インパクト（問合せ数への影響）× 2</strong> + 実行可能性 − 実装工数</p>
+            <div class="tip">月次レポートのメールに「今月の改善優先度TOP5」として毎月1日に自動送信されます。追加で確認したい場合は五十嵐にご連絡ください。</div>
           </div>
         </div>
       </div>
@@ -539,89 +506,65 @@ python3 main.py --report-type scorer
               </table>
             </div>
           </div>
-          <div class="step-item">
-            <div class="step-num-circle">2</div>
-            <div class="step-content">
-              <h4>手動で今すぐ生成したい場合</h4>
-              <div class="code-block">
-cd /home/kosuke_igarashi/projects/ark-analytics<br><br>
-# 今月（先月分）のレポートを今すぐ生成<br>
-python3 main.py --report-type monthly<br><br>
-# 特定月のレポートを生成<br>
-python3 main.py --report-type monthly --month 2026-04<br><br>
-# プレビューのみ（メール送信なし）<br>
-python3 main.py --report-type monthly --dry-run --month 2026-04
-              </div>
-            </div>
-          </div>
-          <div class="step-item">
-            <div class="step-num-circle">3</div>
-            <div class="step-content">
-              <h4>配信先の追加・変更方法</h4>
-              <p><code>config/settings.yaml</code> の <code>report.recipients</code> にメールアドレスを追加してください。</p>
-              <div class="tip">テスト送信を希望される場合は五十嵐（kosuke.axson@gmail.com）にお声がけください。</div>
-            </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">再送信・追加配信をご希望の場合</h4>
+            <p style="font-size:13px;color:#4b5563;">「今すぐ最新レポートを見たい」「別の月のレポートを生成したい」場合は五十嵐にご連絡ください。即座に生成・再送信します。</p>
+            <div class="tip">配信先の追加（CC追加など）も五十嵐にご連絡いただければすぐ対応します。</div>
           </div>
         </div>
       </div>
 
-      <!-- タブ⑤: トラブル対処 -->
+      <!-- タブ⑤: 困ったときは -->
       <div id="tab-trouble" class="tab-content">
         <div class="steps-list">
+          <div class="alert alert-blue" style="margin:0;">
+            🙋 何か気になることがあれば、まず五十嵐（kosuke.axson@gmail.com）にご連絡ください。すべてのシステムは五十嵐側で監視・対応しています。
+          </div>
           <div class="qa-wrap">
 
             <div class="qa">
               <div class="qa-header">
-                <span class="qa-num">Q1</span>
-                <span class="qa-q">cronが実行されてもBQデータが更新されない</span>
+                <span class="qa-num">こんなとき</span>
+                <span class="qa-q">Looker Studioでグラフが空白・データが古い</span>
               </div>
               <div class="qa-body">
-                <strong>① ログを確認</strong><br>
-                <code>cat /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%d').log</code><br><br>
-                <strong>② Google認証が切れていないか確認</strong><br>
-                <code>gcloud auth application-default print-access-token</code><br><br>
-                <strong>③ 認証が切れていた場合は再認証（五十嵐側で実施）</strong><br>
-                <code>gcloud auth application-default login --no-launch-browser</code>
+                <strong>まず試すこと</strong>: 画面右上の日付範囲を「過去90日」に変更してください。<br>
+                それでも表示されない場合は五十嵐までご連絡ください。<br><br>
+                <strong>よくある原因</strong>: GA4からBQへのエクスポートは翌日反映のため、当日分は表示されません（正常です）。
               </div>
             </div>
 
             <div class="qa">
               <div class="qa-header">
-                <span class="qa-num">Q2</span>
-                <span class="qa-q">Looker Studioでグラフが空白になる</span>
-              </div>
-              <div class="qa-body">
-                <strong>原因</strong>: 日付フィルターの期間にデータがない可能性があります。<br>
-                <strong>対処</strong>: 日付範囲コントロールを「全期間」または「過去90日」に変更して確認してください。<br>
-                GA4エクスポートは24〜48時間後にBQに反映されます（正常挙動です）。
-              </div>
-            </div>
-
-            <div class="qa">
-              <div class="qa-header">
-                <span class="qa-num">Q3</span>
+                <span class="qa-num">こんなとき</span>
                 <span class="qa-q">月次レポートのメールが届かない</span>
               </div>
               <div class="qa-body">
-                <strong>① 迷惑メールフォルダ</strong>を確認してください。<br>
-                <strong>② OPENAI_API_KEY の環境変数</strong>が設定されているか確認が必要な場合は五十嵐まで連絡ください。<br>
-                <strong>③ テスト送信</strong>をご希望の場合: <code>python3 main.py --report-type monthly --dry-run</code>
+                <strong>① 迷惑メールフォルダ</strong>（aspr.k.kamimura@gmail.com）を確認してください。<br>
+                <strong>② 迷惑メールにもない場合</strong>は五十嵐にご連絡ください。再送信します。<br>
+                配信先: <code>aspr.k.kamimura@gmail.com</code> ／ 配信日時: 毎月1日 AM9:00
               </div>
             </div>
 
             <div class="qa">
               <div class="qa-header">
-                <span class="qa-num">Q4</span>
-                <span class="qa-q">GTMタグが動作しているか確認したい</span>
+                <span class="qa-num">こんなとき</span>
+                <span class="qa-q">GA4のイベントが記録されていない気がする</span>
               </div>
               <div class="qa-body">
-                <strong>① GTMプレビューモード</strong>で確認:
-                <a href="https://tagmanager.google.com/" target="_blank" style="color:#1a56db;">tagmanager.google.com</a>
-                → GTM-5B3L5372 → 「プレビュー」<br><br>
-                <strong>② GA4リアルタイムレポート</strong>:
-                GA4管理画面 → 「レポート」→「リアルタイム」→ イベント一覧に <code>scroll_depth</code> / <code>cta_click</code> が表示されるか確認<br><br>
-                <strong>③ BQ確認</strong>（24〜48時間後）:
-                <code>SELECT event_name, COUNT(*) FROM analytics_386840839.events_* WHERE _TABLE_SUFFIX >= '20260420' GROUP BY 1</code>
+                GA4管理画面「レポート」→「リアルタイム」を開き、ark-hd.co.jpでスクロールやボタンクリックを行うと、リアルタイムで <code>scroll_depth</code> / <code>cta_click</code> が表示されます。<br>
+                表示されない場合は五十嵐までご連絡ください。
+              </div>
+            </div>
+
+            <div class="qa">
+              <div class="qa-header">
+                <span class="qa-num">こんなとき</span>
+                <span class="qa-q">KPI目標値・配信先メールアドレスを変更したい</span>
+              </div>
+              <div class="qa-body">
+                五十嵐にお声がけください。<code>config/settings.yaml</code> の変更で即座に対応できます。<br>
+                変更可能な項目例: 月次レポート配信先・KPI目標値（セッション数・問合せ数等）・レポート送信タイミング
               </div>
             </div>
 
@@ -631,12 +574,12 @@ python3 main.py --report-type monthly --dry-run --month 2026-04
     </div>
   </div>
 
-  <!-- ④ GTMタグ設置手順 -->
+  <!-- ④ GTM計測設定（確認用） -->
   <div class="section" id="gtm">
-    <div class="section-title">🏷️ GTMタグ設置手順</div>
+    <div class="section-title">🏷️ GTM計測設定（設置済み内容の確認）</div>
 
-    <div class="alert alert-orange" style="margin-bottom:16px;">
-      📋 GTM-5B3L5372 に以下3種のタグを設置します。コードはすでに完成済みです。
+    <div class="alert alert-green" style="margin-bottom:16px;">
+      ✅ GTM-5B3L5372 への3タグの設置は<strong>五十嵐が実施</strong>します。こちらのページは「何が計測されているか」の確認用です。トゥールル様による操作は不要です。
     </div>
 
     <!-- 3タグの説明カード -->
@@ -644,7 +587,7 @@ python3 main.py --report-type monthly --dry-run --month 2026-04
       <div class="tag-card">
         <div class="t-num">タグ ①</div>
         <div class="t-title">スクロール深度</div>
-        <div class="t-desc">ページをどこまで読んだかを計測。コンテンツの読了率・効果的な配置を把握する。</div>
+        <div class="t-desc">ページをどこまで読んだかを自動計測。コンテンツの読了率・効果的な配置を把握できます。</div>
         <div class="t-events">
           <div class="t-event">scroll_depth（25%/50%/75%/90%）</div>
         </div>
@@ -652,7 +595,7 @@ python3 main.py --report-type monthly --dry-run --month 2026-04
       <div class="tag-card">
         <div class="t-num">タグ ②</div>
         <div class="t-title">CTAクリック</div>
-        <div class="t-desc">どのボタン・リンクがクリックされたかを計測。位置・種別・目的・識別名を自動取得。</div>
+        <div class="t-desc">どのボタン・リンクがクリックされたかを自動計測。位置・種別・目的・識別名をすべて自動取得。</div>
         <div class="t-events">
           <div class="t-event">cta_click</div>
           <div class="t-event">cta_location / cta_type</div>
@@ -662,7 +605,7 @@ python3 main.py --report-type monthly --dry-run --month 2026-04
       <div class="tag-card">
         <div class="t-num">タグ ③</div>
         <div class="t-title">フォーム操作</div>
-        <div class="t-desc">/contact/ ページのフォームで、入力開始・送信完了・途中離脱を計測。</div>
+        <div class="t-desc">/contact/ ページのフォームで、入力開始・送信完了・途中離脱を自動計測。離脱原因の特定に活用。</div>
         <div class="t-events">
           <div class="t-event">form_start（入力開始）</div>
           <div class="t-event">contact_finish（送信完了）</div>
@@ -671,165 +614,110 @@ python3 main.py --report-type monthly --dry-run --month 2026-04
       </div>
     </div>
 
-    <!-- 設置手順 -->
+    <!-- 設置後の確認方法（読むだけ） -->
     <div class="card">
       <div class="steps-list">
-        <div class="step-item">
-          <div class="step-num-circle">1</div>
-          <div class="step-content">
-            <h4>GTM管理画面にアクセス</h4>
-            <p><a href="https://tagmanager.google.com/" target="_blank" style="color:#1a56db;">tagmanager.google.com</a> にアクセスし、コンテナ <code>GTM-5B3L5372</code> を開きます。</p>
+        <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:14px 16px;font-size:13px;color:#14532d;">
+          <strong>🔧 設置は五十嵐が実施します。</strong><br>
+          GTM管理画面（GTM-5B3L5372）へのアクセス権限（kosuke.axson@gmail.com）を付与いただいており、五十嵐が直接タグを設置・公開します。
+        </div>
+
+        <div>
+          <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">設置完了後にGA4で確認できるイベント（設置翌日以降）</h4>
+          <p style="font-size:13px;color:#4b5563;margin-bottom:8px;">GA4管理画面「レポート」→「リアルタイム」→「イベント数（イベント名別）」に以下が表示されれば稼働中です：</p>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <code>scroll_depth</code><code>cta_click</code><code>form_start</code><code>contact_finish</code><code>form_abandon</code>
           </div>
         </div>
-        <div class="step-item">
-          <div class="step-num-circle">2</div>
-          <div class="step-content">
-            <h4>タグを新規追加</h4>
-            <p>「タグ」→「新規」→ タグの種類: <strong>カスタムHTML</strong> を選択します。</p>
-            <p style="margin-top:8px;">タグ名・コード・トリガーを下表の通りに設定してください。</p>
-            <table class="data-table" style="margin-top:8px;">
-              <thead><tr><th>タグ名</th><th>コード参照</th><th>トリガー</th></tr></thead>
-              <tbody>
-                <tr><td>GA4 - スクロール深度計測</td><td>GTM_TAGS.md ①</td><td>All Pages（DOM Ready）</td></tr>
-                <tr><td>GA4 - CTAクリック計測</td><td>GTM_TAGS.md ②</td><td>All Pages</td></tr>
-                <tr><td>GA4 - フォーム操作計測</td><td>GTM_TAGS.md ③</td><td>URL に /contact/ を含むページ</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num-circle">3</div>
-          <div class="step-content">
-            <h4>プレビューで動作確認</h4>
-            <p>「プレビュー」をクリック → GTMプレビューモードが起動します。</p>
-            <p>ark-hd.co.jp を開き、以下を確認してください：</p>
-            <table class="data-table" style="margin-top:8px;">
-              <thead><tr><th>確認操作</th><th>Firedになるタグ</th></tr></thead>
-              <tbody>
-                <tr><td>ページをスクロールする</td><td>GA4 - スクロール深度計測</td></tr>
-                <tr><td>お問い合わせボタンをクリックする</td><td>GA4 - CTAクリック計測</td></tr>
-                <tr><td>/contact/ でフォームを入力する</td><td>GA4 - フォーム操作計測</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num-circle">4</div>
-          <div class="step-content">
-            <h4>公開</h4>
-            <p>確認が取れたら「送信」→「公開」をクリックします。</p>
-            <p>バージョン名: <code>カスタムイベント計測タグ追加（2026-04）</code></p>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num-circle">5</div>
-          <div class="step-content">
-            <h4>GA4で確認（設置翌日以降）</h4>
-            <p>GA4管理画面の「イベント」一覧に以下が表示されれば成功です：</p>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
-              <code>scroll_depth</code><code>cta_click</code><code>form_start</code><code>contact_finish</code><code>form_abandon</code>
-            </div>
-          </div>
+
+        <div>
+          <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">計測データの活用方法</h4>
+          <table class="data-table">
+            <thead><tr><th>計測イベント</th><th>Looker Studioでの表示箇所</th><th>改善への活用</th></tr></thead>
+            <tbody>
+              <tr><td><code>scroll_depth</code></td><td>Page4 ページパフォーマンス<br>（scroll_90pct_rate）</td><td>読了率の低いページのコンテンツ改善</td></tr>
+              <tr><td><code>cta_click</code></td><td>Page4 ページパフォーマンス<br>（cta_click_rate）</td><td>クリックされないCTAの位置・文言改善</td></tr>
+              <tr><td><code>contact_finish</code></td><td>Page2 ファネル分析<br>（step5_submission）</td><td>問合せ数のKPI計測（月6件目標）</td></tr>
+              <tr><td><code>form_start</code> / <code>form_abandon</code></td><td>Page2 ファネル分析</td><td>フォーム離脱率の改善施策</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ⑤ Looker Studio設定手順 -->
+  <!-- ⑤ Looker Studio ダッシュボード -->
   <div class="section" id="looker">
-    <div class="section-title">📈 Looker Studio ダッシュボード設定手順</div>
+    <div class="section-title">📈 Looker Studio ダッシュボード（構成と閲覧方法）</div>
 
-    <div class="alert alert-blue" style="margin-bottom:16px;">
-      📐 Page1・Page2は設定済みです。Page3〜5を <code>aspr.k.kamimura@gmail.com</code> アカウントで設定します。
+    <div class="alert alert-green" style="margin-bottom:16px;">
+      ✅ ダッシュボードの構築は<strong>五十嵐が実施</strong>します。Page3〜5は4/22〜23に完成予定です。完成後にURLをお送りします。トゥールル様による設定操作は不要です。
     </div>
 
     <!-- ページ構成 -->
     <div class="card" style="margin-bottom:16px;">
       <table class="progress-table">
-        <thead><tr><th>ページ</th><th>名称</th><th>接続テーブル</th><th>状態</th></tr></thead>
+        <thead><tr><th>ページ</th><th>名称・用途</th><th>主な指標</th><th>状態</th></tr></thead>
         <tbody>
-          <tr class="done"><td>Page1</td><td>KPIサマリー（経営層向け）</td><td>daily_kpi_summary</td><td><span class="badge b-done">✅ 完成</span></td></tr>
-          <tr class="done"><td>Page2</td><td>ファネル分析</td><td>conversion_funnel_daily</td><td><span class="badge b-done">✅ 完成</span></td></tr>
-          <tr class="wip"><td>Page3</td><td>チャネル別分析</td><td>channel_kpi_monthly</td><td><span class="badge b-wip">🔁 作業中</span></td></tr>
-          <tr class="wip"><td>Page4</td><td>ページパフォーマンス</td><td>page_performance</td><td><span class="badge b-wip">🔁 作業中</span></td></tr>
-          <tr class="wip"><td>Page5</td><td>統合ダッシュボード</td><td>rpt_looker_main</td><td><span class="badge b-wip">🔁 作業中</span></td></tr>
+          <tr class="done">
+            <td><b>Page1</b></td>
+            <td>KPIサマリー<br><small style="color:#6b7280;">経営層向け。月次KPIを一目で把握</small></td>
+            <td>月間セッション・CVR・問合せ数・エンゲージメント率</td>
+            <td><span class="badge b-done">✅ 完成</span></td>
+          </tr>
+          <tr class="done">
+            <td><b>Page2</b></td>
+            <td>ファネル分析<br><small style="color:#6b7280;">訪問→問合せの転換率を可視化</small></td>
+            <td>ステップ別到達率・転換率（5ステップ）</td>
+            <td><span class="badge b-done">✅ 完成</span></td>
+          </tr>
+          <tr class="wip">
+            <td><b>Page3</b></td>
+            <td>チャネル別分析<br><small style="color:#6b7280;">流入経路ごとの効果比較</small></td>
+            <td>チャネル別セッション・CVR・エンゲージメント率</td>
+            <td><span class="badge b-wip">🔁 4/22完成予定</span></td>
+          </tr>
+          <tr class="wip">
+            <td><b>Page4</b></td>
+            <td>ページパフォーマンス<br><small style="color:#6b7280;">改善優先ページの特定</small></td>
+            <td>PV・平均滞在時間・スクロール率・CTAクリック率・CV数</td>
+            <td><span class="badge b-wip">🔁 4/22完成予定</span></td>
+          </tr>
+          <tr class="wip">
+            <td><b>Page5</b></td>
+            <td>統合ダッシュボード<br><small style="color:#6b7280;">全データを一画面で俯瞰</small></td>
+            <td>KPI・ファネル・チャネル統合ビュー</td>
+            <td><span class="badge b-wip">🔁 4/23完成予定</span></td>
+          </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- 設置手順 -->
+    <!-- 閲覧方法 -->
     <div class="card">
       <div class="steps-list">
-        <div class="step-item">
-          <div class="step-num-circle">1</div>
-          <div class="step-content">
-            <h4>Looker Studioにアクセス</h4>
-            <p><a href="https://lookerstudio.google.com/" target="_blank" style="color:#1a56db;">lookerstudio.google.com</a> に <strong>aspr.k.kamimura@gmail.com</strong> でログインします。</p>
-          </div>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 16px;font-size:13px;color:#1e40af;">
+          <strong>👀 閲覧方法</strong><br>
+          完成後に共有URLをお送りします。<code>aspr.k.kamimura@gmail.com</code> でGoogleにログインした状態でURLを開くだけで確認できます。
         </div>
-        <div class="step-item">
-          <div class="step-num-circle">2</div>
-          <div class="step-content">
-            <h4>既存レポートにページを追加</h4>
-            <p>Page1・2が含まれる既存レポートを開き、「ページを追加」からPage3〜5を追加します。</p>
-          </div>
+
+        <div>
+          <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">各ページの見方</h4>
+          <table class="data-table">
+            <thead><tr><th>ページ</th><th>どんな問いに答えるか</th><th>推奨確認頻度</th></tr></thead>
+            <tbody>
+              <tr><td>Page1 KPIサマリー</td><td>「今月の目標達成状況は？」「先月より改善した？」</td><td>月1回（月次レポートと合わせて）</td></tr>
+              <tr><td>Page2 ファネル</td><td>「どのステップで訪問者が離脱しているか？」</td><td>月1回〜週1回</td></tr>
+              <tr><td>Page3 チャネル別</td><td>「どの流入経路がもっとも問合せに繋がっているか？」</td><td>月1回</td></tr>
+              <tr><td>Page4 ページ別</td><td>「どのページを優先して改善すべきか？」</td><td>施策実施時</td></tr>
+              <tr><td>Page5 統合</td><td>「全体の状況をざっくり把握したい」</td><td>週1回</td></tr>
+            </tbody>
+          </table>
         </div>
-        <div class="step-item">
-          <div class="step-num-circle">3</div>
-          <div class="step-content">
-            <h4>BigQueryデータソースを接続</h4>
-            <p>「データソースを追加」→「BigQuery」を選択し、以下の順で接続します：</p>
-            <table class="data-table" style="margin-top:8px;">
-              <thead><tr><th>ページ</th><th>プロジェクト</th><th>データセット</th><th>テーブル</th></tr></thead>
-              <tbody>
-                <tr><td>Page3</td><td>ark-hd-analytics</td><td>marts</td><td>channel_kpi_monthly</td></tr>
-                <tr><td>Page4</td><td>ark-hd-analytics</td><td>marts</td><td>page_performance</td></tr>
-                <tr><td>Page5</td><td>ark-hd-analytics</td><td>reports</td><td>rpt_looker_main</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num-circle">4</div>
-          <div class="step-content">
-            <h4>各ページのチャートを設定</h4>
-            <table class="data-table">
-              <thead><tr><th>ページ</th><th>追加するチャート</th><th>ディメンション / 指標</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td>Page3<br>チャネル別</td>
-                  <td>棒グラフ + 表</td>
-                  <td>ディメンション: <code>channel_grouping</code><br>指標: <code>sessions</code>, <code>conversion_rate</code>, <code>engagement_rate</code></td>
-                </tr>
-                <tr>
-                  <td>Page4<br>ページ別</td>
-                  <td>表</td>
-                  <td>ディメンション: <code>page_path</code><br>指標: <code>pageviews</code>, <code>avg_time_on_page_sec</code>, <code>scroll_90pct_rate</code>, <code>cta_click_rate</code>, <code>conversions_from_page</code></td>
-                </tr>
-                <tr>
-                  <td>Page5<br>統合</td>
-                  <td>スコアカード×4<br>+ 折れ線グラフ</td>
-                  <td>指標: <code>sessions</code>, <code>contact_form_submissions</code>, <code>overall_cvr</code>, <code>engagement_rate</code></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num-circle">5</div>
-          <div class="step-content">
-            <h4>日付フィルターを追加</h4>
-            <p>「コントロールを追加」→「日付範囲コントロール」を全ページに追加します。</p>
-            <p>デフォルト期間: <code>先月</code> または <code>過去30日間</code></p>
-          </div>
-        </div>
-        <div class="step-item">
-          <div class="step-num-circle">6</div>
-          <div class="step-content">
-            <h4>共有・公開設定</h4>
-            <p>「共有」→ <code>kosuke.axson@gmail.com</code> に閲覧者権限を付与します。</p>
-            <div class="note">権限エラーが出た場合: BigQueryコンソールで <code>ark-hd-analytics</code> プロジェクトに <code>BigQueryデータ閲覧者</code> ロールを付与してください。</div>
-          </div>
+
+        <div>
+          <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">日付範囲の変更方法</h4>
+          <p style="font-size:13px;color:#4b5563;">画面右上の <strong>日付範囲コントロール</strong> から期間を変更できます。デフォルトは「過去30日間」です。月次で比較したい場合は「先月」を選択してください。</p>
         </div>
       </div>
     </div>
