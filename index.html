@@ -21,7 +21,7 @@
     header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
     header .meta { font-size: 12px; opacity: 0.75; }
     header .progress-bar-wrap { margin-top: 16px; background: rgba(255,255,255,0.2); border-radius: 99px; height: 8px; max-width: 340px; }
-    header .progress-bar-fill { background: #93c5fd; height: 8px; border-radius: 99px; width: 75%; position: relative; }
+    header .progress-bar-fill { background: #93c5fd; height: 8px; border-radius: 99px; width: 88%; position: relative; }
     header .progress-label { font-size: 11px; opacity: 0.85; margin-top: 5px; }
 
     nav {
@@ -197,9 +197,9 @@
 <header>
   <div class="label">System Specification</div>
   <h1>GA4 × BigQuery × AI 分析基盤 仕様書</h1>
-  <div class="meta">作成日: 2026-04-21 &nbsp;|&nbsp; 宛先: ARK株式会社 トゥールル様 &nbsp;|&nbsp; ステータス: 開発中</div>
+  <div class="meta">最終更新: 2026-04-21 &nbsp;|&nbsp; 宛先: ARK株式会社 トゥールル様 &nbsp;|&nbsp; 納品予定: 4/24</div>
   <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
-  <div class="progress-label">全体進捗: 75% 完了（4/24 納品予定）</div>
+  <div class="progress-label">全体進捗: 88% 完了（GTM権限付与済み・Page3〜5 4/22〜23完成予定）</div>
 </header>
 
 <nav>
@@ -214,6 +214,77 @@
 </nav>
 
 <div class="container">
+
+  <!-- 現在のステータスサマリー -->
+  <div class="section" id="status-summary" style="margin-bottom:28px;">
+    <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.07);overflow:hidden;">
+      <div style="background:#1e293b;color:white;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <span style="font-size:15px;font-weight:700;">📋 現在のステータス（2026-04-21 時点）</span>
+        <span style="font-size:11px;background:rgba(255,255,255,0.15);padding:3px 10px;border-radius:99px;">4/24 納品予定</span>
+      </div>
+      <div style="padding:20px 24px;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:16px;">
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;">
+            <div style="font-size:11px;font-weight:700;color:#15803d;margin-bottom:8px;letter-spacing:1px;">✅ 完了済み</div>
+            <ul style="font-size:13px;color:#14532d;line-height:2;list-style:none;padding:0;">
+              <li>✅ GA4 × BigQuery 連携（4/11〜）</li>
+              <li>✅ BQ分析テーブル 5種</li>
+              <li>✅ AI月次レポート自動生成</li>
+              <li>✅ 改善施策スコアリング</li>
+              <li>✅ 自然言語QA機能</li>
+              <li>✅ Looker Studio Page1・Page2</li>
+              <li>✅ GTMタグ 3種 コード完成</li>
+              <li>✅ GTM管理画面アクセス権限 受領</li>
+            </ul>
+          </div>
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;">
+            <div style="font-size:11px;font-weight:700;color:#1d4ed8;margin-bottom:8px;letter-spacing:1px;">🔁 進行中（4/22〜23 完成予定）</div>
+            <ul style="font-size:13px;color:#1e40af;line-height:2;list-style:none;padding:0;">
+              <li>🔁 GTMタグ設置（GTM-5B3L5372）</li>
+              <li>🔁 Looker Studio Page3（チャネル別）</li>
+              <li>🔁 Looker Studio Page4（ページ別）</li>
+              <li>🔁 Looker Studio Page5（統合ビュー）</li>
+            </ul>
+          </div>
+          <div style="background:#faf5ff;border:1px solid #ddd6fe;border-radius:8px;padding:12px 16px;">
+            <div style="font-size:11px;font-weight:700;color:#6d28d9;margin-bottom:8px;letter-spacing:1px;">⏳ 4/24 納品時</div>
+            <ul style="font-size:13px;color:#5b21b6;line-height:2;list-style:none;padding:0;">
+              <li>⏳ Looker Studio URL お渡し</li>
+              <li>⏳ 権限移譲・管理者設定</li>
+              <li>⏳ 最終マニュアルお渡し</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- コピー用テキストサマリー -->
+        <div style="background:#f8faff;border:1px solid #e0e7ff;border-radius:8px;padding:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <span style="font-size:12px;font-weight:700;color:#4338ca;">📋 進捗報告テキスト（コピー用）</span>
+            <button onclick="copyStatus()" style="font-size:11px;background:#4338ca;color:white;border:none;border-radius:6px;padding:4px 12px;cursor:pointer;">コピー</button>
+          </div>
+          <pre id="status-copy-text" style="font-size:12.5px;line-height:1.9;color:#374151;white-space:pre-wrap;font-family:'Hiragino Sans','Meiryo',sans-serif;margin:0;">【進捗報告 2026-04-21】
+
+■完了済み
+✅ GA4 × BigQuery 連携（4/11〜 自動エクスポート継続中）
+✅ BQ分析テーブル 5種（KPI・ファネル・チャネル・ページ・統合）
+✅ AI月次レポート自動生成（毎月1日 AM9:00 → aspr.k.kamimura@gmail.com）
+✅ 改善施策スコアリング・自然言語QA
+✅ Looker Studio Page1（KPIサマリー）・Page2（ファネル分析）
+✅ GTMタグ 3種 コード完成・GTM管理画面アクセス権限 受領済み
+
+■進行中（4/22〜23 完成予定）
+🔁 GTMタグ設置（GTM-5B3L5372 / スクロール・CTA・フォーム）
+🔁 Looker Studio Page3〜5（チャネル・ページ・統合ビュー）
+
+■4/24 納品予定
+⏳ Looker Studio URL お渡し・権限移譲・最終マニュアルお渡し
+
+仕様書・マニュアル:
+https://ai-flow-architect.github.io/ark-analytics-spec/</pre>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ① システム構成フロー -->
   <div class="section" id="flow">
@@ -344,9 +415,9 @@
           </tr>
           <tr class="wip">
             <td><b>Phase④</b></td>
-            <td>GTMタグ設置（GTM-5B3L5372 / スクロール・CTA・フォーム 3種）</td>
-            <td style="text-align:center;"><span class="badge b-wip">🔁 着手中</span></td>
-            <td style="text-align:center;font-size:12px;">4/21</td>
+            <td>GTMタグ設置（GTM-5B3L5372 / スクロール・CTA・フォーム 3種）<br><small style="color:#059669;font-size:11px;">✅ アクセス権限受領済み → 設置作業中</small></td>
+            <td style="text-align:center;"><span class="badge b-wip">🔁 設置中</span></td>
+            <td style="text-align:center;font-size:12px;">4/22</td>
           </tr>
           <tr>
             <td><b>Phase⑤</b></td>
@@ -794,6 +865,16 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
     parent.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(tabId).classList.add('active');
+  }
+
+  // ステータスコピー
+  function copyStatus() {
+    const text = document.getElementById('status-copy-text').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = event.target;
+      btn.textContent = 'コピー済み！';
+      setTimeout(() => btn.textContent = 'コピー', 2000);
+    });
   }
 
   // ナビのアクティブ切り替え
