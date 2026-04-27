@@ -368,8 +368,9 @@
     <div style="background:white;border-radius:10px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
       <div class="tab-nav">
         <button class="tab-btn active" onclick="switchTab(this,'tab-status')">① 進捗情報・ステータス</button>
-        <button class="tab-btn" onclick="switchTab(this,'tab-gtm')">② GTM測定</button>
-        <button class="tab-btn" onclick="switchTab(this,'tab-faq')">③ よくある質問</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-looker')">② Looker Studio の見方</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-gtm')">③ GTM測定</button>
+        <button class="tab-btn" onclick="switchTab(this,'tab-faq')">④ よくある質問</button>
         <button class="tab-btn" onclick="switchTab(this,'tab-auto')">④ 自動処理（操作不要）</button>
         <button class="tab-btn" onclick="switchTab(this,'tab-qa')">⑤ 自然言語QA</button>
         <button class="tab-btn" onclick="switchTab(this,'tab-scorer')">⑥ 改善スコアリング</button>
@@ -440,7 +441,61 @@ https://ai-flow-architect.github.io/ark-analytics-spec/</pre>
         </div>
       </div>
 
-      <!-- タブ②: GTM測定 -->
+      <!-- タブ②: Looker Studio の見方 -->
+      <div id="tab-looker" class="tab-content">
+        <div class="steps-list">
+          <div class="alert alert-green" style="margin:0;">
+            ✅ Looker Studioダッシュボードは <strong>5ページ構成</strong> です。<a href="https://datastudio.google.com/reporting/e26ea2fe-edd9-47d6-8187-dd7c7cd31b8e" target="_blank" style="color:#1a56db;font-weight:700;">ダッシュボードを開く →</a>
+          </div>
+          <table class="data-table" style="margin-top:0;">
+            <thead><tr><th>ページ</th><th>用途・見るべきこと</th><th>活用ポイント</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Page1</strong><br>KPIサマリー</td>
+                <td>セッション数・CVR・問合せ数・資料DL数を一覧表示。月次目標（セッション5,000件・問合せ9件）に対する達成率が一目でわかります。</td>
+                <td>毎月1日の月次レポートと連動。数値が目標を下回っている場合は改善施策スコアリング（⑥タブ）を確認してください。</td>
+              </tr>
+              <tr>
+                <td><strong>Page2</strong><br>ファネル分析</td>
+                <td>「流入 → ページ閲覧 → 資料DL → 問合せ」の各ステップの通過率を表示。どこで離脱が起きているかが把握できます。</td>
+                <td>フォーム送信率（contact_finish）が低い場合は、フォームの改善（入力項目削減・CTA文言変更）を検討してください。</td>
+              </tr>
+              <tr>
+                <td><strong>Page3</strong><br>チャネル別分析</td>
+                <td>流入元ごと（オーガニック検索・SNS・参照・直接）のセッション数・CVR比較。どの集客チャネルが効率的かを評価できます。</td>
+                <td>オーガニック比率が高い＝SEOが機能中。SNSの貢献が低い場合はSNS投稿の内容見直しを検討してください。</td>
+              </tr>
+              <tr>
+                <td><strong>Page4</strong><br>ページ別パフォーマンス</td>
+                <td>各ページのPV・平均滞在時間・スクロール深度・CTAクリック率を表示。コンテンツの読まれ方がわかります。</td>
+                <td>scroll_90pct_rate（90%スクロール率）が低いページはコンテンツの見直し対象。cta_click_rateが低いページはCTAの位置・デザイン改善を検討。</td>
+              </tr>
+              <tr>
+                <td><strong>Page5</strong><br>KPI統合ビュー</td>
+                <td>Page1〜4の主要KPIを1画面にまとめた全体俯瞰ビュー。週次ミーティングでの共有・経営報告に最適です。</td>
+                <td>毎週月曜のLark通知はこのPage5の数値をベースにしています。週次レポートと合わせて確認してください。</td>
+              </tr>
+            </tbody>
+          </table>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">週次レポートの周期変更について</h4>
+            <p style="font-size:13px;color:#4b5563;margin-bottom:8px;">
+              週次（毎週月曜 AM9:00）・隔週のどちらにも対応しています。<br>
+              変更ご希望の場合は五十嵐（kosuke.axson@gmail.com）にご連絡ください。config設定変更で即日対応いたします。
+            </p>
+          </div>
+          <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">ダッシュボードが空白・データが古い場合</h4>
+            <ul style="font-size:13px;color:#4b5563;padding-left:20px;margin:0;">
+              <li>GA4のBigQueryエクスポートは<strong>毎日AM4:00</strong>に実行されます。当日のデータは翌日AM4時以降に反映されます。</li>
+              <li>連携開始（4月11日）以前のデータはBigQueryに存在しないため表示されません。</li>
+              <li>フィルタの日付範囲を「過去30日」→「2026年4月11日〜今日」に変更すると正しく表示されます。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ③: GTM測定 -->
       <div id="tab-gtm" class="tab-content">
         <div class="steps-list">
           <div class="alert alert-green" style="margin:0;">
