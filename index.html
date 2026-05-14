@@ -197,15 +197,16 @@
 <header>
   <div class="label">System Specification</div>
   <h1>GA4 × BigQuery × AI 分析基盤 仕様書</h1>
-  <div class="meta">最終更新: 2026-04-22 &nbsp;|&nbsp; 宛先: 株式会社アテンド 様 &nbsp;|&nbsp; 納品予定: 4/24</div>
+  <div class="meta">最終更新: 2026-05-14 &nbsp;|&nbsp; 宛先: 株式会社アテンド 様 &nbsp;|&nbsp; 5/22 13:00 MTG 事前確認版</div>
   <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
-  <div class="progress-label">全体進捗: 100% 完了（全フェーズ完了・4/24納品予定）</div>
+  <div class="progress-label">納品: 完了（4/24） / Phase⑥ 整合性レビュー対応: 進行中（5/22 MTG前完了予定）</div>
 </header>
 
 <nav>
   <ul>
     <li><a href="#aiflow" class="active">AIフロー</a></li>
     <li><a href="#progress">実装進捗</a></li>
+    <li><a href="#review">5/12レビュー対応</a></li>
     <li><a href="#manual">運用マニュアル</a></li>
   </ul>
 </nav>
@@ -278,7 +279,7 @@
         <div class="output-card">
           <div class="o-icon">📧</div>
           <div class="o-title">月次メールレポート</div>
-          <div class="o-sub">aspr.k.kamimura@gmail.com<br>毎月1日 AM9:00 自動送信</div>
+          <div class="o-sub">貴社ご担当者様（受信先設定済アドレス）<br>毎月1日 AM9:00 自動送信</div>
         </div>
         <div class="output-card">
           <div class="o-icon">💬</div>
@@ -317,7 +318,7 @@
           </tr>
           <tr class="done">
             <td><b>Phase③-A</b></td>
-            <td>AI月次レポート自動生成（毎月1日 AM9:00 → aspr.k.kamimura@gmail.com）</td>
+            <td>AI月次レポート自動生成（毎月1日 AM9:00 → 貴社ご担当者様（受信先設定済アドレス））</td>
             <td style="text-align:center;"><span class="badge b-done">✅ 100%</span></td>
             <td style="text-align:center;font-size:12px;">4/17</td>
           </tr>
@@ -347,12 +348,112 @@
           </tr>
           <tr>
             <td><b>Phase⑤</b></td>
-            <td>権限移譲・全体レクチャー・マニュアル最終版お渡し</td>
-            <td style="text-align:center;"><span class="badge b-wait">⏳ 予定</span></td>
-            <td style="text-align:center;font-size:12px;">4/24</td>
+            <td>権限移譲・全体レクチャー・マニュアル最終版お渡し<br><small style="color:#6d28d9;font-size:11px;">5/22 13:00 MTG にて実施予定（90分枠）</small></td>
+            <td style="text-align:center;"><span class="badge b-wait">⏳ 5/22</span></td>
+            <td style="text-align:center;font-size:12px;">5/22</td>
+          </tr>
+          <tr class="wip">
+            <td><b>Phase⑥</b></td>
+            <td>5/12 整合性レビュー対応（KPI定義・指標統一・Looker調整）<br><small style="color:#1d4ed8;font-size:11px;">5/13 SQL修正完了 → 5/15以降検証・整理（詳細は下記セクション）</small></td>
+            <td style="text-align:center;"><span class="badge b-wip">🔁 60%</span></td>
+            <td style="text-align:center;font-size:12px;">5/22 前</td>
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- 5/12レビュー対応 -->
+  <div class="section" id="review">
+    <div class="section-title">📊 5/12 整合性レビュー対応</div>
+
+    <div class="alert alert-blue" style="margin-bottom:16px;">
+      💡 5/12にいただいた Looker Studio 整合性レビュー（15論点）について、対応状況を3カテゴリで整理しました。<strong>5/22 MTG までに全完了</strong> を予定しています。
+    </div>
+
+    <!-- カテゴリA: 修正済 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="background:#15803d;color:white;padding:12px 20px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+        <span>✅ A. 修正済（5/13 弊社側完了）</span>
+        <span style="font-size:11px;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:99px;font-weight:600;">5/13 23:00 commit 9574b2b / テスト18/18 pass</span>
+      </div>
+      <table class="data-table" style="margin:0;">
+        <thead><tr><th style="width:90px;">対応番号</th><th>レビュー指摘</th><th>修正内容</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>A①</strong></td>
+            <td>BigQuery 集計ロジックの不一致<br>（scroll/CTA/form_start 指標が計測されない）</td>
+            <td>GTMが送信するイベント名と集計SQLの不一致を全件解消。<code>scroll_depth</code> / <code>cta_click</code> / <code>form_start</code> の3指標が正しく集計されるよう SQL を統一しました。</td>
+          </tr>
+          <tr>
+            <td><strong>A②</strong></td>
+            <td>Looker 単位の混在<br>（engagement_rate 98.18% vs Organic Search 0.15 など）</td>
+            <td>engagement_rate / overall_cvr 等の指標に「<code>_pct</code>」接尾辞列を追加。素値（0.xx）とパーセント表示（0〜100）を明確に分離し、Looker側で参照列を切り替えるだけで単位混在が解消できる設計に変更しました。</td>
+          </tr>
+          <tr>
+            <td><strong>A③</strong></td>
+            <td>数値整合性の確保<br>（sessions=118 / submissions=2 / overall_cvr=9.09% が単純計算1.69%とズレる）</td>
+            <td>真因（期間集計時の日次平均CVRと SUM/SUM の差・Simpson's Paradox）を特定。<br><strong>「送信のみCVR」列（<code>inquiry_only_cvr_pct</code>）</strong>を新設し、クライアント直観値（submissions ÷ sessions）と完全一致するよう設計しました。<br><br><strong>検証実測</strong>: 5/6 sessions=22, submissions=2 → 9.09%（= 2/22）完全一致を確認。</td>
+          </tr>
+          <tr>
+            <td><strong>A④</strong></td>
+            <td>Looker Studio 運用ガイド整備<br>（二重100化など想定リスクの明文化）</td>
+            <td>運用マニュアル「② Looker Studio の見方」タブに <strong>単位ルール</strong> セクションを追加。<br>・二重100化（例: 9.09% が 909% と表示される）防止手順<br>・期間集計の真値計算フィールド推奨定義<br>を明記しました。</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- カテゴリB: 5/15以降 -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="background:#1d4ed8;color:white;padding:12px 20px;font-size:14px;font-weight:700;">
+        🔁 B. 5/15以降の対応スケジュール
+      </div>
+      <table class="data-table" style="margin:0;">
+        <thead><tr><th style="width:90px;">対応番号</th><th style="width:90px;">予定日</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>B⑤</strong></td>
+            <td><span class="badge b-wip">5/15</span></td>
+            <td><strong>GTMタグの発火状況 最終検証</strong><br>以前DMでお願いしていたフォームのテスト送信について、お手数をおかけしないよう弊社側で代行いたします。GA4 DebugView ＋ BigQuery にて <code>scroll_depth</code> / <code>cta_click</code> / <code>form_start</code> の発火状況を実測し、<strong>STEP4=0%・avg_time=null・scroll_90=0 の真因を確定</strong>いたします。</td>
+          </tr>
+          <tr>
+            <td><strong>B⑥</strong></td>
+            <td><span class="badge b-wip">5/18</span></td>
+            <td><strong>Looker Studio 受託側修正</strong><br>・グラフの日付逆順表示の修正<br>・ファネル図形状（STEP4と5の逆転）の整合修正<br>・「画面ごとにCV数が異なる」原因の数値根拠出し<br>・「率だけでなく実数も」のCV実数列追加</td>
+          </tr>
+          <tr>
+            <td><strong>B⑦</strong></td>
+            <td><span class="badge b-wip">5/19-5/20</span></td>
+            <td><strong>各指標の定義整理</strong><br>・全KPI分母統一表（指標 × 分子 × 分母 × スコープ × 期間集計方法）<br>・engagement_rate 98.18% の業界比較と算出根拠の説明<br>・Search Console 連携の標準範囲と追加範囲の整理書</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- カテゴリC: 5/22 MTG -->
+    <div class="card" style="margin-bottom:16px;">
+      <div style="background:#6d28d9;color:white;padding:12px 20px;font-size:14px;font-weight:700;">
+        🎯 C. 5/22 13:00 MTG（90分）アジェンダ
+      </div>
+      <table class="data-table" style="margin:0;">
+        <thead><tr><th style="width:80px;">時間</th><th>内容</th></tr></thead>
+        <tbody>
+          <tr><td><strong>0-5分</strong></td><td>挨拶・本日のアジェンダ確認</td></tr>
+          <tr><td><strong>5-35分</strong></td><td>B1〜B15 整合性レビュー論点回答<br><small style="color:#64748b;">事前共有3点ベース（5/20までに別途ご共有）+ 修正済 Looker 画面確認</small></td></tr>
+          <tr><td><strong>35-50分</strong></td><td>GTM発火状況 実測結果の最終共有（5/15検証 反映）</td></tr>
+          <tr><td><strong>50-70分</strong></td><td><strong>Phase⑤ レクチャー</strong>：権限譲渡・ダッシュボード操作・マニュアル説明</td></tr>
+          <tr><td><strong>70-85分</strong></td><td>Clarity連携・リアルタイムアラート 追加見積りご紹介</td></tr>
+          <tr><td><strong>85-90分</strong></td><td>次のアクション確認・MTGメモ送付約束</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="alert alert-green" style="margin-top:12px;">
+      ✅ 事前にお送りする3点（5/20までに別途ご共有）：<br>
+      　① 各指標の定義整理表<br>
+      　② B1〜B15 整合性チェック結果（修正済 / 確認中 / 仕様通り の3分類）<br>
+      　③ 修正必要箇所と対応方針（実装ベース）
     </div>
   </div>
 
@@ -422,7 +523,7 @@
 ■完了済み
 ✅ GA4 × BigQuery 連携（4/11〜 自動エクスポート継続中）
 ✅ BQ分析テーブル 5種（KPI・ファネル・チャネル・ページ・統合）
-✅ AI月次レポート自動生成（毎月1日 AM9:00 → aspr.k.kamimura@gmail.com）
+✅ AI月次レポート自動生成（毎月1日 AM9:00 → 貴社ご担当者様（受信先設定済アドレス））
 ✅ 改善施策スコアリング・自然言語QA
 ✅ Looker Studio Page1（KPIサマリー）・Page2（ファネル分析）
 ✅ GTMタグ設置（GTM-5B3L5372 / スクロール・CTA・フォーム）※4/21公開完了
@@ -478,10 +579,29 @@ https://ai-flow-architect.github.io/ark-analytics-spec/</pre>
             </tbody>
           </table>
           <div>
+            <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">単位ルール（5/13 整合性レビュー対応で追加）</h4>
+            <p style="font-size:13px;color:#4b5563;margin-bottom:8px;">
+              Looker側で「同じKPIなのに値が違って見える」事象を防ぐため、BQ側の指標列に <code>_pct</code> 接尾辞を導入しました。
+            </p>
+            <table class="data-table">
+              <thead><tr><th>列名</th><th>単位</th><th>用途</th></tr></thead>
+              <tbody>
+                <tr><td><code>engagement_rate</code></td><td>素値（0.xx）</td><td>計算用・GA4標準準拠</td></tr>
+                <tr><td><code>engagement_rate_pct</code></td><td>パーセント（0〜100）</td><td>Looker スコアカード・グラフ表示用</td></tr>
+                <tr><td><code>overall_cvr</code></td><td>素値（0.xx）</td><td>計算用</td></tr>
+                <tr><td><code>overall_cvr_pct</code></td><td>パーセント（0〜100）</td><td>Looker 表示用（問合せ + 資料DL）</td></tr>
+                <tr><td><code>inquiry_only_cvr_pct</code></td><td>パーセント（0〜100）</td><td><strong>送信のみCVR</strong>（submissions ÷ sessions × 100）<br>クライアント直観値と完全一致</td></tr>
+              </tbody>
+            </table>
+            <div class="alert alert-blue" style="margin-top:10px;">
+              ⚠️ <strong>二重100化に注意</strong>: Looker側で <code>_pct</code> 列を使う場合、書式は「数値」のままにしてください。「%」書式を当てると 9.09% が 909% と表示される事故が発生します。
+            </div>
+          </div>
+          <div>
             <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">週次レポートの周期変更について</h4>
             <p style="font-size:13px;color:#4b5563;margin-bottom:8px;">
               週次（毎週月曜 AM9:00）・隔週のどちらにも対応しています。<br>
-              変更ご希望の場合は五十嵐（kosuke.axson@gmail.com）にご連絡ください。config設定変更で即日対応いたします。
+              変更ご希望の場合はAIフローアーキテクト（Coconala DM: https://coconala.com/mypage/direct_message/9590324）にご連絡ください。config設定変更で即日対応いたします。
             </p>
           </div>
           <div>
@@ -586,7 +706,7 @@ https://ai-flow-architect.github.io/ark-analytics-spec/</pre>
               <div class="qa-body">
                 はい、可能です。納品時に <strong>権限移譲・マニュアルのレクチャー</strong> を行います。<br>
                 メールアドレスの変更・レポート送信タイミングの調整などはノーコードで対応できます。<br>
-                構造的な変更が必要な場合は、五十嵐（kosuke.axson@gmail.com）までお問い合わせください。
+                構造的な変更が必要な場合は、AIフローアーキテクト（Coconala DM: https://coconala.com/mypage/direct_message/9590324）までお問い合わせください。
               </div>
             </div>
           </div>
@@ -621,7 +741,7 @@ https://ai-flow-architect.github.io/ark-analytics-spec/</pre>
               <tr>
                 <td>月次レポート自動生成・メール送信</td>
                 <td>毎月1日 AM9:00</td>
-                <td>aspr.k.kamimura@gmail.com の受信箱</td>
+                <td>貴社ご担当者様（受信先設定済アドレス） の受信箱</td>
               </tr>
               <tr>
                 <td>Looker Studio ダッシュボード更新</td>
@@ -634,11 +754,11 @@ https://ai-flow-architect.github.io/ark-analytics-spec/</pre>
             <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">データ更新ログの確認方法</h4>
             <div class="code-block">
 # 今日のバッチ処理ログを確認<br>
-cat /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%d').log<br><br>
+cat （弊社開発環境内のログ／クラウド常時稼働）refresh_$(date '+%Y%m%d').log<br><br>
 # 最新ログをリアルタイム確認<br>
-tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%d').log
+tail -f （弊社開発環境内のログ／クラウド常時稼働）refresh_$(date '+%Y%m%d').log
             </div>
-            <div class="note">※ このコマンドは五十嵐側のサーバーで実行します。エラーが出た場合は五十嵐までご連絡ください。</div>
+            <div class="note">※ このコマンドは弊社側のサーバーで実行します。エラーが出た場合はAIフローアーキテクトまでご連絡ください。</div>
           </div>
         </div>
       </div>
@@ -673,7 +793,7 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
                 <tr><td>総合分析</td><td>「今週の改善ポイントをまとめてください」</td></tr>
               </tbody>
             </table>
-            <div class="note" style="margin-top:8px;">ご質問がある場合は五十嵐（kosuke.axson@gmail.com）にご連絡いただければ、BQデータを引いて即回答いたします。</div>
+            <div class="note" style="margin-top:8px;">ご質問がある場合はAIフローアーキテクト（Coconala DM: https://coconala.com/mypage/direct_message/9590324）にご連絡いただければ、BQデータを引いて即回答いたします。</div>
           </div>
         </div>
       </div>
@@ -698,7 +818,7 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
           <div>
             <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">スコア計算の仕組み</h4>
             <p style="font-size:13px;color:#4b5563;">優先度スコア = <strong>インパクト（問合せ数への影響）× 2</strong> + 実行可能性 − 実装工数</p>
-            <div class="tip">月次レポートのメールに「今月の改善優先度TOP5」として毎月1日に自動送信されます。追加で確認したい場合は五十嵐にご連絡ください。</div>
+            <div class="tip">月次レポートのメールに「今月の改善優先度TOP5」として毎月1日に自動送信されます。追加で確認したい場合はAIフローアーキテクトにご連絡ください。</div>
           </div>
         </div>
       </div>
@@ -707,7 +827,7 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
       <div id="tab-report" class="tab-content">
         <div class="steps-list">
           <div class="alert alert-green" style="margin:0;">
-            📧 毎月1日 AM9:00 に <strong>aspr.k.kamimura@gmail.com</strong> へ自動送信されます。手動操作は不要です。
+            📧 毎月1日 AM9:00 に <strong>貴社ご担当者様（受信先設定済アドレス）</strong> へ自動送信されます。手動操作は不要です。
           </div>
           <div class="step-item">
             <div class="step-num-circle">1</div>
@@ -724,8 +844,8 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
           </div>
           <div>
             <h4 style="font-size:14px;font-weight:700;color:#1e293b;margin-bottom:8px;">再送信・追加配信をご希望の場合</h4>
-            <p style="font-size:13px;color:#4b5563;">「今すぐ最新レポートを見たい」「別の月のレポートを生成したい」場合は五十嵐にご連絡ください。即座に生成・再送信します。</p>
-            <div class="tip">配信先の追加（CC追加など）も五十嵐にご連絡いただければすぐ対応します。</div>
+            <p style="font-size:13px;color:#4b5563;">「今すぐ最新レポートを見たい」「別の月のレポートを生成したい」場合はAIフローアーキテクトにご連絡ください。即座に生成・再送信します。</p>
+            <div class="tip">配信先の追加（CC追加など）もAIフローアーキテクトにご連絡いただければすぐ対応します。</div>
           </div>
         </div>
       </div>
@@ -734,7 +854,7 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
       <div id="tab-trouble" class="tab-content">
         <div class="steps-list">
           <div class="alert alert-blue" style="margin:0;">
-            🙋 何か気になることがあれば、まず五十嵐（kosuke.axson@gmail.com）にご連絡ください。すべてのシステムは五十嵐側で監視・対応しています。
+            🙋 何か気になることがあれば、まずAIフローアーキテクト（Coconala DM: https://coconala.com/mypage/direct_message/9590324）にご連絡ください。すべてのシステムは弊社側で監視・対応しています。
           </div>
           <div class="qa-wrap">
 
@@ -745,7 +865,7 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
               </div>
               <div class="qa-body">
                 <strong>まず試すこと</strong>: 画面右上の日付範囲を「過去90日」に変更してください。<br>
-                それでも表示されない場合は五十嵐までご連絡ください。<br><br>
+                それでも表示されない場合はAIフローアーキテクトまでご連絡ください。<br><br>
                 <strong>よくある原因</strong>: GA4からBQへのエクスポートは翌日反映のため、当日分は表示されません（正常です）。
               </div>
             </div>
@@ -756,9 +876,9 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
                 <span class="qa-q">月次レポートのメールが届かない</span>
               </div>
               <div class="qa-body">
-                <strong>① 迷惑メールフォルダ</strong>（aspr.k.kamimura@gmail.com）を確認してください。<br>
-                <strong>② 迷惑メールにもない場合</strong>は五十嵐にご連絡ください。再送信します。<br>
-                配信先: <code>aspr.k.kamimura@gmail.com</code> ／ 配信日時: 毎月1日 AM9:00
+                <strong>① 迷惑メールフォルダ</strong>（貴社ご担当者様（受信先設定済アドレス））を確認してください。<br>
+                <strong>② 迷惑メールにもない場合</strong>はAIフローアーキテクトにご連絡ください。再送信します。<br>
+                配信先: <code>貴社ご担当者様（受信先設定済アドレス）</code> ／ 配信日時: 毎月1日 AM9:00
               </div>
             </div>
 
@@ -769,7 +889,7 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
               </div>
               <div class="qa-body">
                 GA4管理画面「レポート」→「リアルタイム」を開き、ark-hd.co.jpでスクロールやボタンクリックを行うと、リアルタイムで <code>scroll_depth</code> / <code>cta_click</code> が表示されます。<br>
-                表示されない場合は五十嵐までご連絡ください。
+                表示されない場合はAIフローアーキテクトまでご連絡ください。
               </div>
             </div>
 
@@ -779,7 +899,7 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
                 <span class="qa-q">KPI目標値・配信先メールアドレスを変更したい</span>
               </div>
               <div class="qa-body">
-                五十嵐にお声がけください。<code>config/settings.yaml</code> の変更で即座に対応できます。<br>
+                AIフローアーキテクトにお声がけください。<code>config/settings.yaml</code> の変更で即座に対応できます。<br>
                 変更可能な項目例: 月次レポート配信先・KPI目標値（セッション数・問合せ数等）・レポート送信タイミング
               </div>
             </div>
@@ -794,7 +914,7 @@ tail -f /home/kosuke_igarashi/projects/ark-analytics/logs/refresh_$(date '+%Y%m%
 </div>
 
 <footer>
-  © 2026 AIフローアーキテクト 五十嵐 &nbsp;|&nbsp; 株式会社アテンド 様 向け 仕様書
+  © 2026 AIフローアーキテクト &nbsp;|&nbsp; 株式会社アテンド 様 向け 仕様書
 </footer>
 
 <script>
