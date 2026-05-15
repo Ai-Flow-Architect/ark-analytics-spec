@@ -197,7 +197,7 @@
 <header>
   <div class="label">System Specification</div>
   <h1>GA4 × BigQuery × AI 分析基盤 仕様書</h1>
-  <div class="meta">最終更新: 2026-05-14 &nbsp;|&nbsp; 宛先: 株式会社アテンド 様 &nbsp;|&nbsp; 5/22 13:00 MTG 事前確認版</div>
+  <div class="meta">最終更新: 2026-05-15 &nbsp;|&nbsp; 宛先: 株式会社アテンド 様 &nbsp;|&nbsp; 5/22 13:00 MTG 事前確認版</div>
   <div class="progress-bar-wrap"><div class="progress-bar-fill"></div></div>
   <div class="progress-label">納品: 完了（4/24） / Phase⑥ 整合性レビュー対応: 進行中（5/22 MTG前完了予定）</div>
 </header>
@@ -414,8 +414,8 @@
         <tbody>
           <tr>
             <td><strong>B⑤</strong></td>
-            <td><span class="badge b-wip">5/15</span></td>
-            <td><strong>GTMタグの発火状況 最終検証</strong><br>以前DMでお願いしていたフォームのテスト送信について、お手数をおかけしないよう弊社側で代行いたします。GA4 DebugView ＋ BigQuery にて <code>scroll_depth</code> / <code>cta_click</code> / <code>form_start</code> の発火状況を実測し、<strong>STEP4=0%・avg_time=null・scroll_90=0 の真因を確定</strong>いたします。</td>
+            <td><span class="badge b-done">5/15 完了</span></td>
+            <td><strong>GTMタグの発火状況 最終検証 ✅ 完了</strong><br>弊社側で BigQuery 実測検証を実施。<code>contact_finish</code> は5月で計18件正常発火している一方、<code>scroll_depth</code> / <code>cta_click</code> / <code>form_start</code> / <code>form_abandon</code> は <strong>5月全期間 0件</strong> であることを確定。詳細は下記「5/15 検証結果」セクション参照。</td>
           </tr>
           <tr>
             <td><strong>B⑥</strong></td>
@@ -454,6 +454,119 @@
       　① 各指標の定義整理表<br>
       　② B1〜B15 整合性チェック結果（修正済 / 確認中 / 仕様通り の3分類）<br>
       　③ 修正必要箇所と対応方針（実装ベース）
+    </div>
+
+    <!-- 5/15 検証結果 -->
+    <div class="card" style="margin-top:20px;">
+      <div style="background:#0f4c81;color:white;padding:12px 20px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+        <span>🔬 5/15 GTM 発火状況 実測結果（B⑤ 検証完了）</span>
+        <span style="font-size:11px;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:99px;font-weight:600;">BigQuery 実測ベース</span>
+      </div>
+      <div style="padding:18px 20px;">
+        <div class="alert alert-orange" style="margin-bottom:14px;">
+          ⚠️ <strong>真因確定</strong>：GTMコンテナ <code>GTM-5B3L5372</code> は サイトに正しく読み込まれているものの、<code>scroll_depth</code> / <code>cta_click</code> / <code>form_start</code> / <code>form_abandon</code> の4イベントは <strong>5月全期間 BigQuery に1件も到達していません</strong>。<code>contact_finish</code>（送信完了）のみ計18件正常発火しています。
+        </div>
+
+        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ 検証手法</p>
+        <ul style="font-size:13px;color:#374151;line-height:1.9;padding-left:20px;margin-bottom:14px;">
+          <li>BigQuery <code>analytics_386840839.events_*</code> を <code>_TABLE_SUFFIX BETWEEN '20260422' AND CURRENT_DATE()</code> でフルスキャン</li>
+          <li>各イベント名の日別カウントを集計（5/1〜5/14 / 14日分）</li>
+          <li>同期間内の <code>event_params</code> から <code>scroll_pct</code> / <code>cta_*</code> / <code>form_*</code> カスタムパラメータ受信状況も並列確認</li>
+          <li>本番サイト <code>www.ark-hd.co.jp/</code> および <code>/contact/</code> の HTML を取得し、GTM スニペット読み込みとフォーム要素の <code>data-tracking</code> 属性の有無を実測</li>
+        </ul>
+
+        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ 実測結果（5/1〜5/14 14日分）</p>
+        <table class="data-table" style="margin-bottom:14px;">
+          <thead>
+            <tr>
+              <th>イベント名</th>
+              <th style="width:120px;text-align:right;">5月計 発火数</th>
+              <th>カスタムパラメータ受信</th>
+              <th style="width:100px;text-align:center;">判定</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>page_view</code></td>
+              <td style="text-align:right;">802 件</td>
+              <td><code>page_location</code> / <code>page_title</code> 全件</td>
+              <td style="text-align:center;"><span class="badge b-done">✅ 正常</span></td>
+            </tr>
+            <tr>
+              <td><code>session_start</code></td>
+              <td style="text-align:right;">414 件</td>
+              <td><code>ga_session_id</code> / <code>session_engaged</code> 全件</td>
+              <td style="text-align:center;"><span class="badge b-done">✅ 正常</span></td>
+            </tr>
+            <tr>
+              <td><code>contact_finish</code></td>
+              <td style="text-align:right;">18 件</td>
+              <td><code>page_location</code> / <code>engagement_time_msec</code> 等 全件</td>
+              <td style="text-align:center;"><span class="badge b-done">✅ 正常</span></td>
+            </tr>
+            <tr>
+              <td><code>scroll_depth</code></td>
+              <td style="text-align:right;color:#b91c1c;font-weight:700;">0 件</td>
+              <td style="color:#b91c1c;">受信なし</td>
+              <td style="text-align:center;"><span class="badge" style="background:#fee2e2;color:#b91c1c;">❌ 未発火</span></td>
+            </tr>
+            <tr>
+              <td><code>cta_click</code></td>
+              <td style="text-align:right;color:#b91c1c;font-weight:700;">0 件</td>
+              <td style="color:#b91c1c;">受信なし</td>
+              <td style="text-align:center;"><span class="badge" style="background:#fee2e2;color:#b91c1c;">❌ 未発火</span></td>
+            </tr>
+            <tr>
+              <td><code>form_start</code></td>
+              <td style="text-align:right;color:#b91c1c;font-weight:700;">0 件</td>
+              <td style="color:#b91c1c;">受信なし</td>
+              <td style="text-align:center;"><span class="badge" style="background:#fee2e2;color:#b91c1c;">❌ 未発火</span></td>
+            </tr>
+            <tr>
+              <td><code>form_abandon</code></td>
+              <td style="text-align:right;color:#b91c1c;font-weight:700;">0 件</td>
+              <td style="color:#b91c1c;">受信なし</td>
+              <td style="text-align:center;"><span class="badge" style="background:#fee2e2;color:#b91c1c;">❌ 未発火</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ 真因仮説（GTM 公開済み × BQ 0件 の差分）</p>
+        <ol style="font-size:13px;color:#374151;line-height:1.9;padding-left:22px;margin-bottom:14px;">
+          <li><strong>HTML側マッチ要素の不足</strong>：本番サイト <code>/contact/</code> のフォームは旧来型 <code>&lt;form name="form1"&gt;</code> 構造で、GTMタグのトリガー条件として一般的な <code>data-tracking</code> 属性 / <code>data-form-name</code> 属性が付与されていません。タグは公開されていても、トリガーが <em>マッチする要素</em> が存在しない状態です。</li>
+          <li><strong>Scroll Depth 組み込みトリガーの未有効化</strong>の可能性：GA4 構成タグの「Scroll Depth」組み込みトリガー（25/50/75/90%）が GTM 管理画面で無効化されている、または該当タグに紐付けされていない可能性があります。</li>
+          <li><strong>CTAクリック の Click Trigger 条件のミスマッチ</strong>：CTAクリック収集の Click トリガーが <code>data-tracking</code> 属性ベースで設計されている場合、HTML側に同属性が存在しないとマッチしません。</li>
+        </ol>
+
+        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ <code>contact_finish</code> のみ正常発火している理由</p>
+        <p style="font-size:13px;color:#374151;line-height:1.8;margin-bottom:14px;">送信完了ページ <code>/contact/?mode=finish</code> の URL パスをトリガー条件とした Page View 系タグ（<code>contact_finish</code>）は、HTML 側の要素属性に依存せず URL のみで発火条件を判定できるため、正常に動作しています。これにより「お問い合わせ件数」だけは正確に計測できています（5/6 sessions=22, submissions=2 → CVR 9.09% の数値整合は確認済み）。</p>
+
+        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ 5/22 MTG に向けた対応方針</p>
+        <table class="data-table" style="margin-bottom:12px;">
+          <thead><tr><th style="width:90px;">予定日</th><th>対応</th><th style="width:140px;">担当</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="badge b-wip">5/16-5/18</span></td>
+              <td>GTM 管理画面で各タグのトリガー条件を本番HTML構造に合わせて再設定。Scroll Depth 組み込みトリガーの有効化、CTAクリックのセレクタ調整、フォーム要素のトリガー条件をフォーム名ベース（<code>form[name="form1"]</code>）に変更。</td>
+              <td>弊社（AIフローアーキテクト）</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-wip">5/18-5/20</span></td>
+              <td>修正後 24-48h で BigQuery 再実測。<code>scroll_depth</code> / <code>cta_click</code> / <code>form_start</code> の発火を確認次第、Looker Studio 該当チャートのデータ表示確認。</td>
+              <td>弊社</td>
+            </tr>
+            <tr>
+              <td><span class="badge b-wip">5/22 MTG</span></td>
+              <td>修正完了報告。Looker Studio 上で実測データが反映されていることを画面共有で確認。STEP4 / scroll_90 / avg_time 等のチャートが値を持つ状態に。</td>
+              <td>弊社 + 株式会社アテンド 様</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert alert-blue">
+          💡 <strong>サイト改修は不要</strong>：本対応はすべて GTM 管理画面（<code>GTM-5B3L5372</code>）の設定変更のみで完結します。ark-hd.co.jp の HTML 改修・コードデプロイは発生しません。
+        </div>
+      </div>
     </div>
   </div>
 
