@@ -531,53 +531,34 @@
           </tbody>
         </table>
 
-        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ 真因仮説（GTM 公開済み × BQ 0件 の差分）</p>
-        <ol style="font-size:13px;color:#374151;line-height:1.9;padding-left:22px;margin-bottom:14px;">
-          <li><strong>HTML側マッチ要素の不足</strong>：本番サイト <code>/contact/</code> のフォームは旧来型 <code>&lt;form name="form1"&gt;</code> 構造で、GTMタグのトリガー条件として一般的な <code>data-tracking</code> 属性 / <code>data-form-name</code> 属性が付与されていません。タグは公開されていても、トリガーが <em>マッチする要素</em> が存在しない状態です。</li>
-          <li><strong>Scroll Depth 組み込みトリガーの未有効化</strong>の可能性：GA4 構成タグの「Scroll Depth」組み込みトリガー（25/50/75/90%）が GTM 管理画面で無効化されている、または該当タグに紐付けされていない可能性があります。</li>
-          <li><strong>CTAクリック の Click Trigger 条件のミスマッチ</strong>：CTAクリック収集の Click トリガーが <code>data-tracking</code> 属性ベースで設計されている場合、HTML側に同属性が存在しないとマッチしません。</li>
-        </ol>
+        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ 真因（管理画面・サイト・データの実地確認で確定）</p>
+        <p style="font-size:13px;color:#374151;line-height:1.8;margin-bottom:10px;">
+          計測タグは4月時点で公開されていましたが、<strong>タグがGA4へデータを送る方式が、貴社サイトのGA4の組み込み方（タグマネージャー経由での読み込み）と噛み合っておらず、計測したデータがGA4に届かないまま無言で失敗していた</strong>ことを確定いたしました。タグ自体は動いていたものの、送信先と繋がっていなかった、という状態です。
+        </p>
+        <ul style="font-size:13px;color:#374151;line-height:1.9;padding-left:20px;margin-bottom:14px;">
+          <li>貴社サイトのGA4はタグマネージャー経由で読み込まれており、サイト本体に計測コードの直接記述はありません（実地確認済み）</li>
+          <li>各計測タグはこの構成に合わない旧来の送信方式を使っていたため、データがGA4に到達していませんでした</li>
+          <li>「お問い合わせ件数」だけ正常だったのは、送信完了ページのURLを条件に動く別方式のため、この不具合の影響を受けていなかったためです（5/6 セッション22・送信2件＝CVR 9.09% の整合は確認済み）</li>
+        </ul>
 
-        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ <code>contact_finish</code> のみ正常発火している理由</p>
-        <p style="font-size:13px;color:#374151;line-height:1.8;margin-bottom:14px;">送信完了ページ <code>/contact/?mode=finish</code> の URL パスをトリガー条件とした Page View 系タグ（<code>contact_finish</code>）は、HTML 側の要素属性に依存せず URL のみで発火条件を判定できるため、正常に動作しています。これにより「お問い合わせ件数」だけは正確に計測できています（5/6 sessions=22, submissions=2 → CVR 9.09% の数値整合は確認済み）。</p>
+        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ 修正方針</p>
+        <p style="font-size:13px;color:#374151;line-height:1.8;margin-bottom:14px;">
+          3種の計測タグ（スクロール深度・CTAクリック・フォーム操作）の送信方式を、貴社のGA4構成に正しく適合する標準方式へ全面的に作り直します。設計は<strong>第三者監査・3段階のレビュー・堅牢化テスト</strong>を経て確定済みで、本番サイトに負荷や不具合を生じさせない形で検証しております。<strong>サイト本体の改修は不要</strong>で、タグマネージャー側の設定変更のみで完結いたします。
+        </p>
 
-        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ 5/22 MTG に向けた対応方針</p>
+        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin-bottom:6px;">■ 今後のスケジュール</p>
         <table class="data-table" style="margin-bottom:12px;">
-          <thead><tr><th style="width:90px;">予定日</th><th>対応</th><th style="width:140px;">担当</th></tr></thead>
+          <thead><tr><th style="width:110px;">予定日</th><th>対応</th></tr></thead>
           <tbody>
-            <tr>
-              <td><span class="badge b-wip">5/16-5/18</span></td>
-              <td>GTM 管理画面で各タグのトリガー条件を本番HTML構造に合わせて再設定。Scroll Depth 組み込みトリガーの有効化、CTAクリックのセレクタ調整、フォーム要素のトリガー条件をフォーム名ベース（<code>form[name="form1"]</code>）に変更。</td>
-              <td>弊社（AIフローアーキテクト）</td>
-            </tr>
-            <tr>
-              <td><span class="badge b-wip">5/18-5/20</span></td>
-              <td>修正後 24-48h で BigQuery 再実測。<code>scroll_depth</code> / <code>cta_click</code> / <code>form_start</code> の発火を確認次第、Looker Studio 該当チャートのデータ表示確認。</td>
-              <td>弊社</td>
-            </tr>
-            <tr>
-              <td><span class="badge b-wip">5/22 MTG</span></td>
-              <td>修正完了報告。Looker Studio 上で実測データが反映されていることを画面共有で確認。STEP4 / scroll_90 / avg_time 等のチャートが値を持つ状態に。</td>
-              <td>弊社 + 株式会社アテンド 様</td>
-            </tr>
+            <tr><td><span class="badge b-wip">5/17</span></td><td>確定した修正設計をタグマネージャーに適用・公開。適用前にプレビュー機能で発火を実地確認</td></tr>
+            <tr><td><span class="badge b-wip">5/17夜〜5/19</span></td><td>計測データがGA4・BigQueryへ正しく流れていることを実測で確認（反映に1〜2日要するため段階確認）</td></tr>
+            <tr><td><span class="badge b-wip">5/22 MTG</span></td><td>真因・修正内容・実測の反映状況をご報告。Looker Studio 上で該当指標が値を持つ状態を画面共有で確認</td></tr>
           </tbody>
         </table>
 
         <div class="alert alert-blue">
-          💡 <strong>サイト改修は不要</strong>：本対応はすべて GTM 管理画面（<code>GTM-5B3L5372</code>）の設定変更のみで完結します。ark-hd.co.jp の HTML 改修・コードデプロイは発生しません。
+          💡 <strong>サイト改修は不要</strong>：本対応はすべてタグマネージャー（<code>GTM-5B3L5372</code>）の設定変更のみで完結します。サイト本体の改修・公開作業は発生しません。データ反映には GA4 の仕様上1〜2日を要するため、5/22 MTG時点では真因・修正内容のご報告と反映状況の共有を行い、最終的な数値の安定確認はその後も継続いたします。
         </div>
-
-        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin:18px 0 6px;">■ 修正手順書（弊社内資料・実施担当向け）</p>
-        <p style="font-size:13px;color:#374151;line-height:1.8;">
-          5/16実施の修正手順を、タグ毎の現状確認・修正アクション・プレビューモード確認・公開・BQ反映確認までスクリーンショット指示込みで詳細化した手順書を整備済みです。手順書は弊社内資料として GitHub リポジトリに格納しており、修正実施後に公開バージョン番号を追記して履歴管理します。
-        </p>
-        <ul style="font-size:13px;color:#374151;line-height:1.9;padding-left:20px;margin-bottom:8px;">
-          <li>タグ① Scroll Depth → Custom HTML 版へ切替（scroll_pct パラメータ統一）</li>
-          <li>タグ② CTA Click → Click All Elements トリガー版を Custom HTML 版へ差し替え</li>
-          <li>タグ③ Form Operations → Form Submission トリガー版を Custom HTML 版へ差し替え（<code>document.querySelector('form')</code> セレクタ）</li>
-          <li>旧トリガー版は履歴保全のため一時停止のみ（削除しない）</li>
-          <li>公開後 24-48h で BigQuery 反映確認・72h で安定状態確認</li>
-        </ul>
       </div>
     </div>
   </div>
