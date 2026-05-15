@@ -566,6 +566,18 @@
         <div class="alert alert-blue">
           💡 <strong>サイト改修は不要</strong>：本対応はすべて GTM 管理画面（<code>GTM-5B3L5372</code>）の設定変更のみで完結します。ark-hd.co.jp の HTML 改修・コードデプロイは発生しません。
         </div>
+
+        <p style="font-size:13.5px;color:#1e293b;font-weight:700;margin:18px 0 6px;">■ 修正手順書（弊社内資料・実施担当向け）</p>
+        <p style="font-size:13px;color:#374151;line-height:1.8;">
+          5/16実施の修正手順を、タグ毎の現状確認・修正アクション・プレビューモード確認・公開・BQ反映確認までスクリーンショット指示込みで詳細化した手順書を整備済みです。手順書は弊社内資料として GitHub リポジトリに格納しており、修正実施後に公開バージョン番号を追記して履歴管理します。
+        </p>
+        <ul style="font-size:13px;color:#374151;line-height:1.9;padding-left:20px;margin-bottom:8px;">
+          <li>タグ① Scroll Depth → Custom HTML 版へ切替（scroll_pct パラメータ統一）</li>
+          <li>タグ② CTA Click → Click All Elements トリガー版を Custom HTML 版へ差し替え</li>
+          <li>タグ③ Form Operations → Form Submission トリガー版を Custom HTML 版へ差し替え（<code>document.querySelector('form')</code> セレクタ）</li>
+          <li>旧トリガー版は履歴保全のため一時停止のみ（削除しない）</li>
+          <li>公開後 24-48h で BigQuery 反映確認・72h で安定状態確認</li>
+        </ul>
       </div>
     </div>
   </div>
