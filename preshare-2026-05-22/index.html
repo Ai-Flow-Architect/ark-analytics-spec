@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5/22 MTG 事前共有3点 | ARK Analytics</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Hiragino Sans", "Meiryo", sans-serif;
+      background: #f4f6fa;
+      color: #2d3748;
+      line-height: 1.8;
+    }
+    header {
+      background: linear-gradient(135deg, #0f4c81 0%, #1a56db 60%, #2563eb 100%);
+      color: white;
+      padding: 36px 48px 28px;
+    }
+    header .label { font-size: 11px; letter-spacing: 2px; opacity: 0.7; text-transform: uppercase; margin-bottom: 6px; }
+    header h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    header .meta { font-size: 12px; opacity: 0.85; }
+
+    nav {
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    nav ul { display: flex; gap: 0; max-width: 960px; margin: 0 auto; list-style: none; overflow-x: auto; padding: 0 16px; }
+    nav ul li a {
+      display: block; padding: 14px 18px; font-size: 13px; font-weight: 600;
+      color: #64748b; text-decoration: none; white-space: nowrap;
+      border-bottom: 3px solid transparent;
+    }
+    nav ul li a:hover, nav ul li a.active { color: #1a56db; border-bottom-color: #1a56db; }
+
+    .container { max-width: 960px; margin: 0 auto; padding: 36px 24px 80px; }
+
+    .doc { background: white; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); padding: 32px 36px; margin-bottom: 32px; scroll-margin-top: 64px; }
+
+    .doc h1 { font-size: 22px; color: #1a56db; border-left: 5px solid #1a56db; padding-left: 14px; margin-bottom: 16px; line-height: 1.4; }
+    .doc h2 { font-size: 16px; color: #1e293b; margin-top: 26px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0; }
+    .doc h3 { font-size: 14px; color: #334155; margin-top: 18px; margin-bottom: 10px; font-weight: 700; }
+    .doc p { font-size: 13.5px; margin-bottom: 12px; }
+    .doc ul, .doc ol { margin-left: 22px; margin-bottom: 12px; font-size: 13.5px; }
+    .doc li { margin-bottom: 4px; }
+    .doc strong { color: #0f4c81; }
+    .doc hr { border: none; border-top: 1px solid #e2e8f0; margin: 24px 0; }
+    .doc blockquote { background: #fffbeb; border-left: 3px solid #f59e0b; padding: 10px 14px; margin: 12px 0; font-size: 12.5px; color: #78350f; border-radius: 0 6px 6px 0; }
+    .doc blockquote p { margin-bottom: 6px; }
+    .doc code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 12px; font-family: monospace; color: #1d4ed8; }
+
+    .doc table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 12px 0; }
+    .doc thead { background: #1e293b; color: white; }
+    .doc th { padding: 8px 12px; text-align: left; font-weight: 600; font-size: 12px; }
+    .doc td { padding: 8px 12px; border-bottom: 1px solid #e8edf4; vertical-align: top; }
+    .doc tr:last-child td { border-bottom: none; }
+    .doc tr:nth-child(even) td { background: #fafbfc; }
+
+    .toc { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 20px 24px; margin-bottom: 28px; }
+    .toc h3 { color: #1d4ed8; font-size: 14px; margin-bottom: 10px; font-weight: 700; }
+    .toc ol { margin-left: 22px; font-size: 13.5px; }
+    .toc a { color: #1d4ed8; text-decoration: none; font-weight: 600; }
+    .toc a:hover { text-decoration: underline; }
+
+    .back-link { display: inline-block; padding: 8px 14px; background: white; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; color: #475569; text-decoration: none; margin-bottom: 18px; }
+    .back-link:hover { background: #f1f5f9; color: #1e293b; }
+
+    footer { text-align: center; font-size: 12px; color: #94a3b8; padding: 28px; border-top: 1px solid #e2e8f0; }
+
+    @media (max-width: 640px) {
+      header { padding: 24px 20px; }
+      .container { padding: 20px 16px 60px; }
+      .doc { padding: 20px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="label">5/22 MTG Pre-share</div>
+  <h1>5/22 13:00 MTG 事前共有3点</h1>
+  <div class="meta">作成: 2026-05-20 &nbsp;|&nbsp; 宛先: 貴社 様 &nbsp;|&nbsp; AIフローアーキテクト</div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#kpi">① KPI定義整理表</a></li>
+    <li><a href="#integrity">② 整合性チェック結果</a></li>
+    <li><a href="#cv">③ CV定義案</a></li>
+    <li><a href="../">← 仕様書TOPへ</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+  <a href="../" class="back-link">← 仕様書TOPへ戻る</a>
+
+  <div class="toc">
+    <h3>5/22 MTG 事前共有3点 目次</h3>
+    <ol>
+      <li><a href="#kpi">KPI定義整理表</a> — 全KPIを「指標×分子×分母×スコープ×期間集計」の5列で統一</li>
+      <li><a href="#integrity">整合性チェック結果（B1〜B15）</a> — 修正済 / 検証中 / 仕様通り の3分類</li>
+      <li><a href="#cv">CV定義案</a> — 案A〜D比較・推奨は案A（送信完了のみ）</li>
+    </ol>
+  </div>
+
+  <div class="doc" id="kpi">
+<p>作成: 2026-05-16 / 更新: 2026-05-20 / AIフローアーキテクト
+対象: 貴社 ARK Analytics（example.com）</p>
+<hr />
+<h2 id="_1">本資料の確度</h2>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>確定</td>
+<td>集計ロジックが実装済で確定（数値定義は確定）</td>
+</tr>
+<tr>
+<td>暫定</td>
+<td>定義は確定だが、実データ値の一致は GTM公開後の検証で確定を目指す</td>
+</tr>
+<tr>
+<td>検証中</td>
+<td>GTM公開権限付与後 即適用→検証で確定を目指す（GA4→BQ反映1〜2日のラグあり）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>本表の「定義・分子・分母・スコープ」は確定（実装済）。
+ただしスクロール・CTAクリック・フォーム入力開始を分子に含む指標の実データ値は、GTM公開（タグ・変数・トリガー一式は実装確定済）後の検証で確定を目指します。</p>
+</blockquote>
+<h3 id="_2">期間集計に関する重要な区別</h3>
+<p>本表の「期間集計方法」は2層に分けてご覧ください。</p>
+<p>① 日次値（その日1日分）　：　エンゲージメント率は「その日のエンゲージセッション ÷ その日のセッション」、平均セッション時間・平均ページ数はその日の平均として算出されます。日をまたいだ合算は行っていません（合算すると平均同士を平均してしまい、いわゆる単純計算と合わなくなる典型原因になるためです）。</p>
+<p>② 期間横断の真値（複数日をまたぐ集計）　：　期間をまたぐCVR・エンゲージメント率は、ダッシュボード側の計算式で「分子の合計 ÷ 分母の合計 × 100」として定義します。日次値の平均ではなく合計同士の比で出すのが正しい期間値です。</p>
+<hr />
+<h2 id="1-kpi">1. KPI定義一覧表（指標／分子／分母／スコープ／期間集計方法）</h2>
+<h3 id="1-1">1-1. セッション・エンゲージメント系</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>指標</th>
+<th>分子</th>
+<th>分母</th>
+<th>スコープ</th>
+<th>期間集計方法</th>
+<th>確度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>①</td>
+<td>セッション数</td>
+<td>―</td>
+<td>―</td>
+<td>セッション単位</td>
+<td>日次の合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>②</td>
+<td>ユーザー数</td>
+<td>―</td>
+<td>―</td>
+<td>ユーザー単位</td>
+<td>日次の合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>③</td>
+<td>新規ユーザー</td>
+<td>―</td>
+<td>―</td>
+<td>初回セッション該当</td>
+<td>日次の合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>④</td>
+<td>エンゲージセッション数</td>
+<td>―</td>
+<td>―</td>
+<td>エンゲージ判定セッション</td>
+<td>日次の合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑤</td>
+<td>エンゲージメント率</td>
+<td>エンゲージセッション</td>
+<td>セッション</td>
+<td>セッション単位</td>
+<td>日次＝その日の比率 ／ 期間横断は合計÷合計で算出</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑥</td>
+<td>エンゲージメント率（％表記列）</td>
+<td>エンゲージセッション</td>
+<td>セッション</td>
+<td>セッション単位</td>
+<td>⑤を百分率にした日次値</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑦</td>
+<td>直帰率</td>
+<td>1 −（エンゲージ率）</td>
+<td>（補数）</td>
+<td>セッション単位</td>
+<td>日次＝その日の比率 ／ 期間横断は 1−(合計÷合計)</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑧</td>
+<td>新規ユーザー率</td>
+<td>新規ユーザー</td>
+<td>ユーザー</td>
+<td>ユーザー単位</td>
+<td>日次＝その日の比率 ／ 期間横断は合計÷合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑨</td>
+<td>平均セッション時間（秒）</td>
+<td>―</td>
+<td>―</td>
+<td>セッション単位</td>
+<td>日次＝その日の平均（期間横断は再集計が必要）</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑩</td>
+<td>セッションあたりページ数</td>
+<td>―</td>
+<td>―</td>
+<td>セッション単位</td>
+<td>日次＝その日の平均（期間横断は再集計が必要）</td>
+<td>確定</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-2">1-2. コンバージョン系</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>指標</th>
+<th>分子</th>
+<th>分母</th>
+<th>スコープ</th>
+<th>期間集計方法</th>
+<th>確度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>⑪</td>
+<td>問い合わせ送信完了数</td>
+<td>「問い合わせ完了」イベント件数</td>
+<td>―</td>
+<td>イベント単位（完了ページ <code>/contact/?mode=finish</code> 到達由来）</td>
+<td>日次の合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑫</td>
+<td>問い合わせページ閲覧数</td>
+<td>問い合わせページのページ閲覧</td>
+<td>―</td>
+<td>イベント単位</td>
+<td>日次の合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑬</td>
+<td>資料ダウンロード数</td>
+<td>資料DLイベント</td>
+<td>―</td>
+<td>イベント単位（<strong>現状未実装・0</strong>）</td>
+<td>日次の合計</td>
+<td>検証中／未実装</td>
+</tr>
+<tr>
+<td>⑭</td>
+<td>相談申込数</td>
+<td>相談申込イベント</td>
+<td>―</td>
+<td>イベント単位（<strong>現状未実装・0</strong>）</td>
+<td>日次の合計</td>
+<td>検証中／未実装</td>
+</tr>
+<tr>
+<td>⑮</td>
+<td>総コンバージョン数</td>
+<td>送信完了 ＋ 資料DL ＋ 相談申込（<strong>イベント単位カウントの加算</strong>）</td>
+<td>―</td>
+<td>イベント単位（最終出力）</td>
+<td>日次の合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑯</td>
+<td>フォームCR</td>
+<td>送信完了数</td>
+<td>問い合わせページ閲覧数</td>
+<td>分母＝問い合わせページ閲覧</td>
+<td>日次＝その日の比率 ／ 期間横断は合計÷合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑰</td>
+<td>フォームCR（％表記列）</td>
+<td>同上</td>
+<td>同上</td>
+<td>同上</td>
+<td>⑯を百分率にした日次値</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑱</td>
+<td>全体CVR</td>
+<td>送信完了 ＋ 資料DL</td>
+<td>セッション</td>
+<td><strong>分子に資料DLを含む</strong>／分母＝全セッション</td>
+<td>日次＝その日の比率 ／ 期間横断は合計÷合計</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑲</td>
+<td>全体CVR（％表記列）</td>
+<td>同上</td>
+<td>セッション</td>
+<td>同上</td>
+<td>⑱を百分率にした日次値</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>⑳</td>
+<td>厳密CVR（御社直観に一致）</td>
+<td>送信完了のみ</td>
+<td>セッション</td>
+<td><strong>資料DLを含まない</strong>／分母＝全セッション</td>
+<td>日次＝送信÷セッション×100 ／ 期間横断は合計÷合計</td>
+<td>確定</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>★ ⑮ 総コンバージョン数のスコープ補足:
+集計の仕組み上、CV件数は <strong>イベント単位のカウント</strong>で算出します（送信完了・資料DL・相談申込のイベント件数の加算）。セッション単位のCV有無フラグは別系統（流入元別の集計など）で用いるもので、CV件数の母数とは系統が異なります。</p>
+<p>★ 御社5/12レビューの「セッション118・送信2・全体CVR9.09%が単純計算（2÷118≒1.69%）と合わない」点について:
+全体CVR（⑱）は分母＝セッション・分子＝（送信＋資料DL）の合算で算出する別定義です。御社の直観（送信÷セッション）に一致する指標として「厳密CVR」列（⑳）をご用意しています。
+過去の検証では、ある集計期間でセッション22・送信2・厳密CVR9.09%（＝2÷22）として一致を確認しています。件数は集計期間で変動するため、5/22では「どの期間で比べるか」を先に合わせて照合します。</p>
+</blockquote>
+<h3 id="1-3">1-3. ファネル系</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>ステップ</th>
+<th>分子（到達）</th>
+<th>分母（前段 or 起点）</th>
+<th>スコープ</th>
+<th>確度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>㉑</td>
+<td>STEP1 サイト訪問</td>
+<td>訪問セッション</td>
+<td>―</td>
+<td>セッション単位</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>㉒</td>
+<td>STEP2a CTAクリック（記事内中間行動）</td>
+<td>CTAクリックのあったセッション</td>
+<td>STEP1</td>
+<td>セッション単位</td>
+<td>暫定（実値は検証中）</td>
+</tr>
+<tr>
+<td>㉓</td>
+<td>STEP2b サービスページ閲覧</td>
+<td>サービスページ閲覧セッション</td>
+<td>STEP1</td>
+<td>セッション単位</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>㉔</td>
+<td>STEP3 問い合わせページ到達</td>
+<td>問い合わせ／問合せページ到達セッション</td>
+<td>STEP2b</td>
+<td>セッション単位</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>㉕</td>
+<td>STEP4 フォーム入力開始</td>
+<td>フォーム入力開始セッション</td>
+<td>STEP3</td>
+<td>セッション単位</td>
+<td>暫定（実値は検証中）</td>
+</tr>
+<tr>
+<td>㉖</td>
+<td>STEP5 フォーム送信完了</td>
+<td>送信完了セッション</td>
+<td>STEP4</td>
+<td>セッション単位</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>㉗</td>
+<td>訪問→送信CVR</td>
+<td>STEP5 送信</td>
+<td>STEP1 訪問</td>
+<td>セッション単位</td>
+<td>確定</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>★ 御社5/12レビューの「STEP4 入力開始＝0% / STEP5 送信完了＝4.41% の逆転」点について:
+分子の「フォーム入力開始」イベントが計測タグの不具合で未発火（実データ0件）だったことが原因です。
+ファネルの集計ロジック（STEP4＝入力開始 / STEP5＝送信完了）自体は正しく実装されています。修正タグの実装は確定済で、GTM公開後の検証で実データの正常化を目指します。</p>
+</blockquote>
+<h3 id="1-4">1-4. チャネル別／ページ別</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>指標</th>
+<th>分子</th>
+<th>分母</th>
+<th>スコープ</th>
+<th>確度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>㉘</td>
+<td>チャネル別エンゲージメント率</td>
+<td>エンゲージセッション</td>
+<td>セッション</td>
+<td>チャネル×月単位</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>㉙</td>
+<td>チャネル別コンバージョン率</td>
+<td>CV有セッション</td>
+<td>セッション</td>
+<td>チャネル×月単位</td>
+<td>確定</td>
+</tr>
+<tr>
+<td>㉚</td>
+<td>ページ別平均滞在時間</td>
+<td>ページ閲覧の滞在時間平均</td>
+<td>ページ閲覧数</td>
+<td>ページ×週単位</td>
+<td>暫定（実値は検証中）</td>
+</tr>
+<tr>
+<td>㉛</td>
+<td>ページ別90%スクロール率</td>
+<td>90%以上スクロール</td>
+<td>ページ閲覧数</td>
+<td>ページ×週単位</td>
+<td>暫定（実値は検証中）</td>
+</tr>
+<tr>
+<td>㉜</td>
+<td>ページ別CTAクリック率</td>
+<td>CTAクリック</td>
+<td>ページ閲覧数</td>
+<td>ページ×週単位</td>
+<td>暫定（実値は検証中）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>★ 御社5/12レビューの「チャネル別エンゲージメント率が 0.15 / 0.3、主な分析は 98.18% で整合しない」点について:
+同じ定義（エンゲージ÷セッション）ですが、素の小数（0.15＝15%）と百分率表記（98.18 等）の単位が画面間で混在していたことが主因です。百分率表記の列に統一して参照することで解消します。
+なお 98.18% という表示値については、当方の最新BQ実測（2026-05-01〜05-19・sessions=542 / engaged=143 → 26.38%）で再現できておらず、出所を調査中です。詳細は §3 をご参照ください。</p>
+</blockquote>
+<hr />
+<h2 id="2">2. 「分母が異なる」混乱の構造（御社「分母が異なる定義」ご指摘への回答骨子）</h2>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>分母</th>
+<th>一言</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>全体CVR（⑱⑲）</td>
+<td>全セッション</td>
+<td>分子に資料DLを含む（広義CV）。現状は資料DL＝0なので実質「送信÷セッション」</td>
+</tr>
+<tr>
+<td>厳密CVR（⑳）</td>
+<td>全セッション</td>
+<td>送信のみ÷セッション。御社の直観（2÷22＝9.09%）に一致</td>
+</tr>
+<tr>
+<td>フォームCR（⑯⑰）</td>
+<td>問い合わせページ閲覧</td>
+<td>フォームに来た方の中での送信率（分母が異なる）</td>
+</tr>
+<tr>
+<td>ファネル訪問→送信CVR（㉗）</td>
+<td>訪問セッション</td>
+<td>ファネル文脈での訪問→送信率</td>
+</tr>
+</tbody>
+</table>
+<p>→ 「同じCVRに見えても分母が4種ある」ことを本表で固定します。5/22 MTGで本表を画面共有します。</p>
+<hr />
+<h2 id="3-gtm">3. 検証中（GTM公開→検証で確定を目指す）として残る項目</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>残る理由</th>
+<th>確定目標</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STEP4 フォーム入力開始の実数値（㉕）</td>
+<td>GTM公開後の発火→GA4→BQ反映に1〜2日</td>
+<td>公開後 即検証</td>
+</tr>
+<tr>
+<td>90%スクロール率／CTAクリック率の実数値（㉛㉜）</td>
+<td>同上</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>ページ別平均滞在時間（㉚・現状空欄）</td>
+<td>エンゲージメントイベント収集側の切り分けを先行実施</td>
+<td>検証で即判定</td>
+</tr>
+<tr>
+<td>エンゲージメント率 98.18% の再現性</td>
+<td>当方最新BQ実測（5/1〜5/19）は26.38%。98.18%は別計算・出所未確定</td>
+<td>全方位調査（下記）</td>
+</tr>
+<tr>
+<td>資料DL／相談申込（⑬⑭）</td>
+<td>イベント未実装（将来追加候補）</td>
+<td>ニーズ発生時に別途ご相談</td>
+</tr>
+</tbody>
+</table>
+<h3 id="9818">エンゲージメント率 98.18% の調査方針</h3>
+<p>当方の最新BQ実測（2026-05-01〜05-19・GA4 export データを直接集計）は engagement_rate = 26.38%（sessions=542 / engaged_sessions=143）でした。一方 Looker Studio 表示の 98.18% は、単位の二重百分率化（×100の重複）だけでは数値の範囲として説明できません。同じ定義（engaged_sessions ÷ sessions）から異なる値が出ている原因を以下の通り全方位で調査します。確定するまでは確定値としては扱わないでください。</p>
+<p>① 集計期間差　：　98.18% が観測された期間と当方実測の期間が異なる可能性
+② 参照先の違い　：　ダッシュボードが想定と異なるデータソース／計算式を参照している可能性
+③ 手動転記値　：　ある時点の表示値がレビュー資料に転記された可能性
+④ 指標の取り違え　：　別指標が「エンゲージメント率」として表示されている可能性</p>
+<p>→ ②③④の切り分けを 5/22 MTG時点までに進め、確定まで「再現確認中」として正直にご報告します。</p>
+<hr />
+<p><em>このファイル: 20_client_KPI定義表.md（貴社様 提示版）</em></p>
+  </div>
+
+  <div class="doc" id="integrity">
+<p>作成: 2026-05-16 / 更新: 2026-05-20 / AIフローアーキテクト</p>
+<hr />
+<h2 id="_1">本資料の確度</h2>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>修正済</td>
+<td>集計の仕組み側で対応済・残作業なし</td>
+</tr>
+<tr>
+<td>検証中</td>
+<td>対応方針・設定内容は確定。GTMコンテナへの公開権限付与後、即時公開→検証で確定を目指します</td>
+</tr>
+<tr>
+<td>仕様通り</td>
+<td>不具合ではなく、定義・表示単位のご説明で解消する項目</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>本資料の確度: 暫定（公開後の検証依存の項目あり）。計測タグ由来の実データ（フォーム入力開始・スクロール・CTAクリック）に依存する項目は、修正タグの本番公開後、GA4→BigQueryへの反映に1〜2日のタイムラグを経て確定いたします。5/22 MTGでは「現時点で実測できた範囲」を実データでご報告し、完全一致確認は以降も継続して安定確認いたします。</p>
+</blockquote>
+<hr />
+<h2 id="1-3">1. 3分類サマリー</h2>
+<table>
+<thead>
+<tr>
+<th>分類</th>
+<th style="text-align: right;">件数</th>
+<th>概要</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>修正済</td>
+<td style="text-align: right;">13</td>
+<td>CVR定義・指標定義の明確化、レポート配信復旧、共有設定など</td>
+</tr>
+<tr>
+<td>検証中（公開権限付与後 即適用→検証で確定を目指す）</td>
+<td style="text-align: right;">10</td>
+<td>フォーム入力開始・スクロール・CTAクリックの計測タグ修正に依存する項目</td>
+</tr>
+<tr>
+<td>仕様通り（説明で解消）</td>
+<td style="text-align: right;">8</td>
+<td>単位混在・日付表示・期間集計など定義説明で解消する項目</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>年月絞り込み・対象URL明示・日本語表示・Search Console活用は、ダッシュボードUI調整／一部追加範囲として別管理です（§5参照）。</p>
+</blockquote>
+<hr />
+<h2 id="2-13">2. 修正済（13件・残作業なし）</h2>
+<table>
+<thead>
+<tr>
+<th>論点</th>
+<th>ご説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>セッション118・送信2・全体CVR9.09%が単純計算と合わない</td>
+<td>御社直観（送信÷セッション）に一致する「厳密CVR」列をご用意。過去検証で送信2÷セッション22＝9.09%の一致を確認済</td>
+</tr>
+<tr>
+<td>「問い合わせ送信完了」が何を指すか</td>
+<td>問い合わせ完了ページ（<code>/contact/?mode=finish</code>）到達を計測する「完了」イベント</td>
+</tr>
+<tr>
+<td>全体CVRの具体的行動</td>
+<td>（送信＋資料DL）÷ セッション</td>
+</tr>
+<tr>
+<td>エンゲージメント率の定義</td>
+<td>エンゲージセッション ÷ セッション（GA4標準の考え方）</td>
+</tr>
+<tr>
+<td>完了ページのCV扱い</td>
+<td>ページ閲覧自体はCVに数えず「完了」イベントのみをCVとして計上</td>
+</tr>
+<tr>
+<td>「問い合わせ完了ページ」と認識してよいか</td>
+<td>はい（<code>/contact/?mode=finish</code>）</td>
+</tr>
+<tr>
+<td>セッション635・送信28・フォームCR2.94の計算ズレ</td>
+<td>上記CVRと同根（単位・分母差）。厳密CVR列で直観に一致</td>
+</tr>
+<tr>
+<td>CR定義が分からない</td>
+<td>KPI定義整理表で4種の分母を明示</td>
+</tr>
+<tr>
+<td>週次レポート配信の復旧</td>
+<td>復旧対応完了済</td>
+</tr>
+<tr>
+<td>閲覧アカウントの共有追加</td>
+<td>完了済</td>
+</tr>
+<tr>
+<td>marketing@ への配信先追加</td>
+<td>配信先への追加・配信動作確認済</td>
+</tr>
+<tr>
+<td>何をCVとしているか</td>
+<td>現状CV＝問い合わせ送信完了</td>
+</tr>
+<tr>
+<td>KPI分母の統一整理</td>
+<td>KPI定義整理表として体系化（実データ反映は検証期間後）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-10">3. 検証中（10件・公開権限付与後 即適用→検証で確定を目指す）</h2>
+<blockquote>
+<p>適用状況について：計測タグの修正内容は本番公開準備完了（タグ・変数・トリガー・実装すべて確定済）。本番反映のため、GTMコンテナ（GTM-XXXXXXX）への公開権限付与の段取りを進めております。公開後5〜10分でDebugViewに着弾確認、BigQuery反映には1〜2日かかります。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>論点</th>
+<th>原因と対応方針</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STEP4 入力開始＝0% / STEP5 送信完了＝4.41% 逆転</td>
+<td>原因＝計測タグの記述方式がサイトのGA4読み込み構成と噛み合わず、入力開始イベントが未発火。集計ロジックは正しく実装済。公開後 即検証</td>
+</tr>
+<tr>
+<td>STEP4と5が逆では？</td>
+<td>上記と同根。集計ロジックは正・実データ正常化は公開後の検証で確定を目指す</td>
+</tr>
+<tr>
+<td>問合せ2件なのに送信完了0なのは？</td>
+<td>送信完了イベント自体は正常計上（集計期間で件数変動）。入力開始の欠落による見え方の差。公開後 即検証</td>
+</tr>
+<tr>
+<td>平均滞在時間が空欄</td>
+<td>エンゲージメントイベントの収集側を先行して切り分け。公開後 即検証</td>
+</tr>
+<tr>
+<td>90%スクロールが全て0</td>
+<td>スクロールイベント未発火。集計側の参照は整備済。タグ修正公開後 即検証</td>
+</tr>
+<tr>
+<td>CTAクリック率が全て0</td>
+<td>CTAクリックイベント未発火。集計側は正。タグ修正公開後 即検証</td>
+</tr>
+<tr>
+<td>画面ごとにCV数が異なる原因</td>
+<td>集計経路ごとの差分を実数で整理してご報告</td>
+</tr>
+<tr>
+<td>率だけでなく実数も見たい</td>
+<td>ページ別CV実数列を整備。実値はタグ修正公開後 即検証</td>
+</tr>
+<tr>
+<td>セッション→CTA→到達→入力→送信 の5ステップ表示</td>
+<td>ファネル定義は実装済。CTA・入力開始の実データはタグ修正公開後 即検証</td>
+</tr>
+<tr>
+<td>エンゲージメント率98.18%が高すぎる懸念</td>
+<td>当方の最新実測（5/1〜5/19・BQ実測）は26.38%（sessions=542 / engaged=143）。Looker表示98.18%とは数値帯域が異なり、二重百分率化だけでは説明不能。集計期間差・参照先の違い・手動転記等を全方位調査</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-8">4. 仕様通り（8件・定義説明で解消）</h2>
+<table>
+<thead>
+<tr>
+<th>論点</th>
+<th>ご説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>エンゲージメント率はGA4標準か独自か</td>
+<td>計算式はGA4標準の考え方（engaged_sessions ÷ sessions）で実装上正しいと確認済。当方の最新BQ実測（5/1〜5/19）は26.38%。Looker表示98.18%は再現できておらず、出所を調査中（確定まで確定値として扱わない）</td>
+</tr>
+<tr>
+<td>主な分析98.18% vs チャネル別0.15 整合性</td>
+<td>同じ定義だが、素の小数と百分率表記の単位混在が主因。百分率列に統一参照で解消</td>
+</tr>
+<tr>
+<td>全体CVR9.09% vs チャネル別0〜0.1</td>
+<td>上記と同根（単位混在）。百分率列で解消</td>
+</tr>
+<tr>
+<td>主な分析と数値が整合しない</td>
+<td>上記2件と同根</td>
+</tr>
+<tr>
+<td>グラフの日付が逆順表示</td>
+<td>主にダッシュボード側のグラフ並べ替え設定で解消</td>
+</tr>
+<tr>
+<td>日付変更しても左上KPIが固定</td>
+<td>スコアカードに日付フィルタ未設定が原因。編集権限のお引き渡しとあわせてMTG当日に設定</td>
+</tr>
+<tr>
+<td>日付表示が統一されていない</td>
+<td>ダッシュボード側の日付書式統一で対応（標準範囲）</td>
+</tr>
+<tr>
+<td>期間集計が単純計算と一致しない</td>
+<td>日次値の平均と「合計÷合計」の差が原因。期間値は合計同士の比で出す計算式に統一して解消</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-ui">5. UI調整／追加範囲（別管理）</h2>
+<table>
+<thead>
+<tr>
+<th>論点</th>
+<th>区分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>年月単位で絞り込みたい</td>
+<td>ダッシュボードの日付フィルタ設定（操作ご案内＋MTG実演）</td>
+</tr>
+<tr>
+<td>STEP2/3 の対象URL・基準明示</td>
+<td>KPI定義整理表に明記（セッション単位と明記済）</td>
+</tr>
+<tr>
+<td>日本語表示</td>
+<td>表示名の日本語化（標準範囲）</td>
+</tr>
+<tr>
+<td>Search Console活用／検索クエリ閲覧</td>
+<td>接続＝標準範囲／生データの整形・可視化＝追加範囲（境界線整理書でご説明）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-522-mtg">6. 5/22 MTG時点で残る最大の論点（期待値調整）</h2>
+<ol>
+<li>① 原因：計測タグの記述方式がサイトのGA4読み込み構成と噛み合わず、3イベントが未送信だった → 正しい方式へ全面修正済（タグ・変数・トリガー実装確定）。</li>
+<li>② フォーム入力開始・スクロール・CTAクリックの実データ正常化は、GTM公開→GA4反映1〜2日に依存（5/22時点で公開済の場合、反映状況の方向性確認まで）。</li>
+<li>③ エンゲージメント率の出所差異：最新BQ実測（5/1〜5/19）は26.38%・Looker表示は98.18%。同じ計算定義から異なる値が出ている原因の確定が必要（集計期間差・参照先の違い・手動転記を全方位調査）。</li>
+<li>④ GA4初期化の設定確認を最優先で実施（これが整わないと修正タグが送信されないため）。</li>
+</ol>
+<blockquote>
+<p>⚠️ GTM公開は GTM-XXXXXXX への公開権限付与が必要です。権限付与の段取りで進行が左右されるため、5/22 MTG時点で「公開済・反映待ち」となる可能性と「公開未完」となる可能性の両方を想定しております。詳細はメインメッセージにてご相談させていただきます。</p>
+<p>5/22は「原因の確定＋修正の適用状況＋方向性のご報告」を主目的とし、全数値の完全一致確認は5/22以降も継続して安定確認する、という前提で進めさせていただきます。</p>
+</blockquote>
+<hr />
+<p><em>このファイル: 21_client_整合性チェック結果.md（貴社様 提示版）</em></p>
+  </div>
+
+  <div class="doc" id="cv">
+<p>作成: 2026-05-16 / 更新: 2026-05-20 / AIフローアーキテクト
+目的: 「アークとして何をコンバージョン（CV）とするか」を 5/22 MTG で決めるためのたたき台</p>
+<hr />
+<h2 id="_1">本資料の確度</h2>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>確定</td>
+<td>既存の仕組みで運用可能（実装変更ほぼ不要）</td>
+</tr>
+<tr>
+<td>暫定</td>
+<td>構成イベントの一部が、GTM公開後の検証で実データ確定を目指す</td>
+</tr>
+<tr>
+<td>検証中／未実装</td>
+<td>該当イベント自体が未実装、または検証期間で確定を目指す</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>本資料の確度: 暫定（公開後の検証依存）。フォーム入力開始を構成に含む案は、計測タグの本番公開後の検証で実データが確定します。資料DL・相談申込を含む案は、該当イベントが現状未実装です。</p>
+</blockquote>
+<hr />
+<h2 id="1-cv">1. 前提：現状の仕組みで「CV」になっているもの</h2>
+<table>
+<thead>
+<tr>
+<th>行動</th>
+<th>状況</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>問い合わせ送信完了（完了ページ <code>/contact/?mode=finish</code> 到達）</td>
+<td>実装済・正常計上：<strong>5月（5/1〜5/19）22件 ／ 4月以降累計（4/1〜5/19）48件</strong>（いずれもBigQuery実測・2026-05-20時点。件数は集計期間で変動します）</td>
+</tr>
+<tr>
+<td>資料ダウンロード</td>
+<td>未実装（将来追加候補）</td>
+</tr>
+<tr>
+<td>相談申込</td>
+<td>未実装（将来追加候補）</td>
+</tr>
+<tr>
+<td>フォーム入力開始</td>
+<td>集計の仕組みは実装済・計測タグ不具合で現状0件・修正タグの本番公開後の検証で実データ正常化</td>
+</tr>
+</tbody>
+</table>
+<p>→ 現状、実質的なCVは「問い合わせ送信完了」のみです（資料DL・相談申込は未実装のため0）。
+なお、CV件数は「イベント単位のカウント」で算出します（セッション単位のCV有無フラグは流入元別集計などで用いる別系統で、CV件数の母数とは系統が異なります）。</p>
+<hr />
+<h2 id="2-cv-4">2. CV定義 候補4案（比較表）</h2>
+<table>
+<thead>
+<tr>
+<th>案</th>
+<th>定義（CVに数える行動）</th>
+<th>分子</th>
+<th>分母</th>
+<th>メリット</th>
+<th>デメリット</th>
+<th style="text-align: center;">推奨度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td>問い合わせ送信完了のみ</td>
+<td>送信完了件数</td>
+<td>セッション</td>
+<td>実装済で即運用可／御社直観（2÷22＝9.09%）と一致／二重計上なし</td>
+<td>資料DL等の見込み行動を取りこぼす</td>
+<td style="text-align: center;">★★★★★</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>送信完了＋資料DL</td>
+<td>送信完了＋資料DL</td>
+<td>セッション</td>
+<td>広義リード（BtoB王道）を捕捉／既存の全体CVR定義と一致</td>
+<td>資料DLが現状未実装（実装まで実質Aと同値）</td>
+<td style="text-align: center;">★★★☆☆</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td>フォーム入力開始＋送信完了</td>
+<td>段階別に2指標で管理</td>
+<td>セッション</td>
+<td>入力開始という先行指標で離脱分析が可能／ファネルと完全整合</td>
+<td>入力開始の実データが計測タグ公開後の検証で確定するまで運用不可／入力開始をCVにすると過大計上の懸念</td>
+<td style="text-align: center;">★★☆☆☆</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>送信完了＋資料DL＋相談申込</td>
+<td>3行動の合算</td>
+<td>セッション</td>
+<td>全リード行動を網羅／総コンバージョン数の定義と一致</td>
+<td>資料DL・相談申込が未実装／現状はAと同値で「定義だけ広い」状態</td>
+<td style="text-align: center;">★★☆☆☆</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-a">3. 当方推奨案：<strong>案A（問い合わせ送信完了のみ）</strong></h2>
+<h3 id="_2">推奨理由</h3>
+<p>① 即時運用可能　：　送信完了は既に正常計上されており（BigQuery実測・2026-05-20時点：5月（5/1〜5/19）22件／4月以降累計（4/1〜5/19）48件・件数は集計期間で変動）、計測タグ不具合の影響を受けません（完了ページのURL到達で計測しているため）。この実測件数でも案A（送信完了のみ）が最適という結論は変わりません</p>
+<p>② 直観と一致　　：　御社5/12レビューの「2件÷セッション」の直観と完全に一致。厳密CVRとしてそのまま可視化でき、過去検証で2÷22＝9.09%の一致を確認済</p>
+<p>③ 数値の信頼性　：　計測タグ修正（本番公開後の検証）の成否に左右されず、5/22時点で確実に「正しいCV数」をご提示できます</p>
+<p>④ 拡張余地あり　：　将来 資料DL・相談申込を実装した場合、案B/Dへそのまま拡張できます（集計の枠は既に用意済）</p>
+<h3 id="_3">運用上の付帯提案</h3>
+<ul>
+<li>ⓐ ダッシュボードの「主CV」は案A（送信完了）に固定し、厳密CVRを主KPIとする</li>
+<li>ⓑ フォーム入力開始は「CVではなく先行指標（離脱分析用）」として併設し、案Cの利点を主CVを汚さず取り込む</li>
+<li>ⓒ 資料DL・相談申込は「将来の候補」として位置づけ。<strong>必要になった追加範囲は、計測タグとサイト側でのイベント発火実装のみ</strong>で、集計の仕組みは作り込み済みのため改修は不要です。ニーズが発生した時点で改めてご相談する位置づけです（押し売りはいたしません）</li>
+</ul>
+<hr />
+<h2 id="4-522-mtg">4. ご判断をお願いしたいポイント（5/22 MTG）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>確認事項</th>
+<th>当方推奨</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>主CVを「送信完了のみ」に確定してよいか</td>
+<td>はい（案A）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>資料DL・相談申込について</td>
+<td>現時点は案Aで確定を推奨。ニーズが発生した際に改めてご相談（押し売りしません）</td>
+</tr>
+<tr>
+<td>3</td>
+<td>フォーム入力開始は CVではなく先行指標扱いでよいか</td>
+<td>はい（離脱分析用）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5">5. リスク・検証中項目</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>状態</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>案B/Dの資料DL・相談申込</td>
+<td>未実装（CV採用には計測タグ・サイト側の発火実装が必要。集計は無改修。現状はA相当）</td>
+</tr>
+<tr>
+<td>案Cのフォーム入力開始の実データ</td>
+<td>修正タグの本番公開後の検証で確定を目指す（公開前は運用不可）</td>
+</tr>
+<tr>
+<td>送信完了の二重計上</td>
+<td>なし（完了ページのURL到達のみで計測。フォームタグからは別途送信しない設計）</td>
+</tr>
+<tr>
+<td>送信完了件数</td>
+<td>集計期間で変動するため、件数比較時は対象期間を先に合わせます</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>このファイル: 22_client_CV定義案.md（貴社様 提示版）</em></p>
+  </div>
+
+  <a href="../" class="back-link">← 仕様書TOPへ戻る</a>
+
+</div>
+
+<footer>
+  AIフローアーキテクト &nbsp;|&nbsp; 貴社様 ARK Analytics 5/22 MTG 事前共有資料
+</footer>
+
+<script>
+  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+  const sections = Array.from(navLinks).map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  function updateActive() {
+    const scrollPos = window.scrollY + 80;
+    let active = sections[0];
+    sections.forEach(s => { if (s.offsetTop <= scrollPos) active = s; });
+    navLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + (active ? active.id : ''));
+    });
+  }
+  window.addEventListener('scroll', updateActive);
+  updateActive();
+</script>
+
+</body>
+</html>
