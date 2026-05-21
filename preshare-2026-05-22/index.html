@@ -80,11 +80,12 @@
 <header>
   <div class="label">5/22 MTG Pre-share</div>
   <h1>5/22 13:00 MTG 事前共有3点</h1>
-  <div class="meta">作成: 2026-05-20 &nbsp;|&nbsp; 宛先: 貴社 様 &nbsp;|&nbsp; AIフローアーキテクト</div>
+  <div class="meta">作成: 2026-05-20 &nbsp;|&nbsp; <strong>更新: 2026-05-21（当日アップデート反映）</strong> &nbsp;|&nbsp; 宛先: 貴社 様 &nbsp;|&nbsp; AIフローアーキテクト</div>
 </header>
 
 <nav>
   <ul>
+    <li><a href="#update-0521">★ 5/22当日アップデート</a></li>
     <li><a href="#kpi">① KPI定義整理表</a></li>
     <li><a href="#integrity">② 整合性チェック結果</a></li>
     <li><a href="#cv">③ CV定義案</a></li>
@@ -103,6 +104,57 @@
       <li><a href="#integrity">整合性チェック結果（B1〜B15）</a> — 修正済 / 検証中 / 仕様通り の3分類</li>
       <li><a href="#cv">CV定義案</a> — 案A〜D比較・推奨は案A（送信完了のみ）</li>
     </ol>
+  </div>
+
+  <div class="doc" id="update-0521" style="border:2px solid #1a7f37;background:#f0fbf3;border-radius:10px;padding:20px 24px;margin-bottom:28px;">
+    <h2 style="margin-top:0;color:#1a7f37;">★ 5/22当日アップデート（2026-05-21 実施）</h2>
+    <p><strong>本日のゴール：「どの数値を信頼して運用判断できる状態か」を、経営KPIと改善KPIを分けて確定します。</strong></p>
+
+    <h3>エグゼクティブサマリー</h3>
+    <ul>
+      <li>GTMの計測タグを正しい方式へ全面修正し、本番公開しました（<strong>version 3・2026/05/21</strong>）。スクロール／CTAクリック／フォーム操作の発火を公開前プレビューで全件実証済み（<strong>未発火ゼロ</strong>）。</li>
+      <li>「数値が合わない」の真因を<strong>3つに特定</strong>。うち2つ（計測タグ・new_user_rate計算）は<strong>修正完了</strong>。残りはLooker表示設定とGA4収集設定の確認です。</li>
+      <li>経営KPI（問い合わせ送信完了）は現時点で信頼可。改善KPIは反映後に安定します。</li>
+    </ul>
+
+    <h3>御社6観点への回答</h3>
+    <table>
+      <thead><tr><th>#</th><th>観点</th><th>状況</th><th>詳細</th></tr></thead>
+      <tbody>
+        <tr><td>①</td><td>GTM公開状況</td><td>✅ 公開済</td><td>GTM-XXXXXXX に version 3 公開（5/21）。3計測タグ全面修正＋GA4イベントタグ3・トリガー3・変数11新設</td></tr>
+        <tr><td>②</td><td>GA4 DebugView</td><td>✅ 着弾実証済</td><td>プレビューで scroll_depth／cta_click／form_start 発火確認（未発火ゼロ）。当日実演</td></tr>
+        <tr><td>③</td><td>BigQuery実データ</td><td>⏳ 反映待ち</td><td>page_view・contact_finish 格納済。新3イベントは GA4→BQ 反映1〜2日（5/23頃確定）</td></tr>
+        <tr><td>④</td><td>Looker反映後数値</td><td>✅ 真因特定済</td><td>engagement_rate はBQ実測26.38%（最大50%/日）。Looker 98.18%は数学的に算出不可＝表示設定側の問題</td></tr>
+        <tr><td>⑤</td><td>KPI定義・分母統一</td><td>✅ 確定</td><td>分子／分母／スコープ／期間まで定義固定。CVRは分母4種・厳密CVR列併記（下記①参照）</td></tr>
+        <tr><td>⑥</td><td>実問い合わせ件数一致</td><td>⚠️ 段階確認</td><td>経営KPI（送信完了22件＝GA4＝BQ）一致確認済。改善KPI含む4層完全一致は③反映後</td></tr>
+      </tbody>
+    </table>
+
+    <h3>「数値が合わない」3大真因</h3>
+    <ul>
+      <li><strong>真因1【最重要】計測が届いていなかった（2系統）</strong>：(a) スクロール・CTA・フォームのタグが誤った方式で送信されず失敗→<strong>今回 dataLayer.push 方式へ全面修正・公開・実証済</strong>。(b) 滞在時間(engagement_time)が1856イベント中23件のみ＝「平均滞在時間0秒」の原因。これは(a)とは別系統（GA4拡張計測／Googleタグ側）で<strong>GA4設定の確認が必要</strong>。</li>
+      <li><strong>真因2【98.18%の正体】期間集計で「合計の比」を使っていない</strong>：engagement_rate は実データで1日も50%を超えず（期間26.38%）。98.18%はengagement_rateからはどんな集計でも算出不可能＝Lookerスコアカードが日次率を平均／合計、または別指標取り違え。期間ユーザー数も同様に過大（438 vs 実355）。正：期間の率は <code>SUM(分子)÷SUM(分母)</code>、期間ユニークはGA4本体値。</li>
+      <li><strong>真因3【単位混在】</strong>：素の小数(0.15=15%)と百分率(98.18)の混在→%列に統一して解消。</li>
+    </ul>
+
+    <h3>実施済みの修正（5/21）</h3>
+    <ul>
+      <li>GTM version 3 本番公開（GA4設定タグは新設せず＝page_view二重計上を回避）</li>
+      <li>new_user_rate&gt;100%バグ修正（新規「セッション」÷「ユーザー」の単位不一致を是正）＋データパイプライン全再デプロイ（クラウド完結）</li>
+      <li>プレビューで全タグ発火・未配信ゼロを実証</li>
+    </ul>
+
+    <h3>残アクションと完了見込み</h3>
+    <table>
+      <thead><tr><th>アクション</th><th>主体</th><th>見込み</th></tr></thead>
+      <tbody>
+        <tr><td>Lookerスコアカードを ratio of sums に修正（98.18%→正値）</td><td>当方＋御社画面</td><td>当日実施可</td></tr>
+        <tr><td>ユーザー数（期間）の定義統一（GA4本体値を使用）</td><td>当方</td><td>当日説明</td></tr>
+        <tr><td>GA4 engagement_time収集の設定確認（拡張計測／Googleタグ）</td><td>当方＋御社GA4</td><td>当日切り分け</td></tr>
+        <tr><td>新3イベントのBQ反映確認</td><td>自動</td><td>5/23頃</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.9em;color:#555;margin-bottom:0;">※ 本セクションは 2026-05-21 時点の実測・実装に基づきます。以下①〜③は事前共有時点の資料です。</p>
   </div>
 
   <div class="doc" id="kpi">
